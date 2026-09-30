@@ -146,7 +146,7 @@ Répartition en couches :
 | Lua et AIO, ou addon dédié | HUD, barre segmentée, interface de sélection, bouton |
 | Patch client | finition seulement : nom, icône et infobulle des auras posées sur les alliés, lisibilité du journal de combat. Détachable et repoussable |
 
-Identifiants : **tranche 90 du registre des plages, 90000-90999** (`ID_RANGES.md`, à la racine du dépôt),
+Identifiants : **tranche 90 du registre des plages, 90000-90999** ([`ID_RANGES.md`](https://github.com/Adrestie/WoW-mods/blob/main/ID_RANGES.md) de WoW-mods),
 dans tous les espaces.
 
 ## 11. Sécurité du canal client
