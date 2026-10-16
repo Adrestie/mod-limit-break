@@ -120,7 +120,7 @@ namespace LimitBreak
         uint32 minMembers = 4;               // plancher d'activation
         uint32 updateInterval = 1000;        // ms, phases B et C
         uint32 requestCooldown = 500;        // ms, anti-flood des requetes
-        uint8  outsideDisplay = 1;           // 0 masque, 1 grise (§16, non tranche)
+        uint8  outsideDisplay = 0;           // 0 masque (decide), 1 grise
         bool   countSelfHeal = true;         // §16 : regles non tranchees,
         bool   countEnvironment = true;      //       reglables en attendant
         bool   countPvP = true;

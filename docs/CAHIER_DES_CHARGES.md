@@ -121,6 +121,9 @@ paliers, et ne permet pas d'en changer librement hors combat.
 
 - HUD dédié, barre segmentée, poussée aux participants du conteneur élu.
 - La barre est toujours affichée, indépendamment de l'état des choix du joueur.
+- Un membre non éligible, c'est-à-dire hors du conteneur élu, ne voit pas la
+  barre du tout : elle est masquée, pas grisée (tranché le 2026-10-16). La
+  pause, qui concerne tout le groupe, reste affichée.
 - Cadence de rafraîchissement fixe et volontairement basse, jamais une diffusion
   par coup porté.
 
@@ -259,7 +262,6 @@ Aucune modification du cœur n'est nécessaire.
 | Les 16 effets, soit 4 archétypes × 4 paliers | contenu, poste le plus lourd |
 | Liste des boss ouvrant le 4e segment, et difficultés concernées | contenu |
 | Temps d'incantation du déclenchement, et son interruptibilité | règle, jamais abordée |
-| Affichage du HUD pour un membre hors du conteneur élu : masqué ou grisé | règle, posée puis jamais tranchée |
 | PvP sauvage en monde ouvert : les champs de bataille et arènes sont désactivés, mais le PvP en zone contestée alimenterait la jauge | règle, conséquence non tranchée de l'ouverture au monde ouvert |
 | Visuels des effets : réutiliser des visuels existants ou en créer | production, impacte le besoin de patch client |
 | Interaction avec l'autobalance et le Mythic+ | équilibrage |

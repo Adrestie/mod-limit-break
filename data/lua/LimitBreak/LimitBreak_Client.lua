@@ -87,7 +87,7 @@ local HUD_OFF, HUD_ACTIVE, HUD_PAUSED, HUD_OUTSIDE = 0, 1, 2, 3
 
 local state = {
     hud = HUD_OFF, points = 0, thresholds = { 100, 200, 300, 400 },
-    fourthOpen = false, tier = 0, spell = 0, outsideDisplay = 1,
+    fourthOpen = false, tier = 0, spell = 0, outsideDisplay = 0,
 }
 local catalog = {}                          -- catalog[tier] = { {archetype, spell}, ... }
 local choices = { 0, 0, 0, 0 }
@@ -404,7 +404,7 @@ local function OnModuleMessage(text)
             state.fourthOpen = f[8] == "1"
             state.tier = tonumber(f[9]) or 0
             state.spell = tonumber(f[10]) or 0
-            state.outsideDisplay = tonumber(f[11]) or 1
+            state.outsideDisplay = tonumber(f[11]) or 0
         end
         Refresh()
     elseif kind == "R" then

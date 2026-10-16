@@ -223,7 +223,7 @@ namespace LimitBreak
         sConfig.minMembers = std::max<uint32>(1, sConfigMgr->GetOption<uint32>("LimitBreak.MinMembers", 4));
         sConfig.updateInterval = std::max<uint32>(100, sConfigMgr->GetOption<uint32>("LimitBreak.UpdateInterval", 1000));
         sConfig.requestCooldown = sConfigMgr->GetOption<uint32>("LimitBreak.RequestCooldown", 500);
-        sConfig.outsideDisplay = uint8(std::min<uint32>(1, sConfigMgr->GetOption<uint32>("LimitBreak.Hud.OutsideDisplay", 1)));
+        sConfig.outsideDisplay = uint8(std::min<uint32>(1, sConfigMgr->GetOption<uint32>("LimitBreak.Hud.OutsideDisplay", 0)));
         sConfig.countSelfHeal = sConfigMgr->GetOption<bool>("LimitBreak.Count.SelfHeal", true);
         sConfig.countEnvironment = sConfigMgr->GetOption<bool>("LimitBreak.Count.Environment", true);
         sConfig.countPvP = sConfigMgr->GetOption<bool>("LimitBreak.Count.PvP", true);

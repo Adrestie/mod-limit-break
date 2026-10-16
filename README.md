@@ -43,7 +43,8 @@ Written:
   reached tier's spell, or a button opening the selection when no spell is
   chosen for it (greyed in combat), and a selection window. The module pushes
   the state to the bar as addon messages; the bar's buttons go through AIO to
-  the commands above.
+  the commands above. A member outside the elected container is not
+  eligible and sees no bar at all; a paused gauge stays visible.
 
 Still to decide (§16), shipped neutral or empty:
 
@@ -59,8 +60,6 @@ Still to decide (§16), shipped neutral or empty:
   (`mod_limit_break_boss`, empty);
 * the cast time of the trigger and whether it can be interrupted (instant
   meanwhile), and whether a dead player may trigger (refused meanwhile);
-* the bar of a member outside the elected container, hidden or greyed
-  (`LimitBreak.Hud.OutsideDisplay`, greyed meanwhile);
 * effect visuals, autobalance and Mythic+ interaction.
 
 ## Layout
