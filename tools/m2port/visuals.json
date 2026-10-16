@@ -1,188 +1,276 @@
 {
   "export_dir": "E:/atelier/limit-break/export",
   "game_dir": "Spells\\LimitBreak",
-  "first_id": 90100,
   "scale": 3.0,
+  "remap": {
+    "0x8021": "0x4014",
+    "0x8015": "0x4011",
+    "0x8022": "0x0010"
+  },
   "visuals": [
     {
+      "id": 90100,
       "name": "lb_7fx_tombofsargeras_raid_cathedral_arcaneshield",
       "source": "spells\\7fx_tombofsargeras_raid_cathedral_arcaneshield.m2",
       "attach": "base",
-      "label": "Tank: cathedral arcane shield"
+      "label": "Tank: cathedral arcane shield",
+      "note": "tank, ok"
     },
     {
+      "id": 90101,
       "name": "lb_fx_aegisofironforge_areatrigger",
       "source": "spells\\fx_aegisofironforge_areatrigger.m2",
       "attach": "base",
-      "label": "Tank: aegis of Ironforge"
+      "label": "Tank: aegis of Ironforge",
+      "note": "texture animation missing (plugin)"
     },
     {
+      "id": 90102,
       "name": "lb_7fx_lightforged_bunker_shield",
       "source": "spells\\7fx_lightforged_bunker_shield.m2",
       "attach": "base",
-      "label": "Tank: Lightforged bunker shield"
+      "label": "Tank: Lightforged bunker shield",
+      "note": "tank, ok"
     },
     {
+      "id": 90103,
       "name": "lb_fx_lightshield_areatrigger",
       "source": "spells\\fx_lightshield_areatrigger.m2",
       "attach": "base",
-      "label": "Tank: light shield"
+      "label": "Tank: light shield",
+      "remap_effects": true
     },
     {
+      "id": 90104,
       "name": "lb_fx_barrierblossom_areatrigger",
       "source": "spells\\fx_barrierblossom_areatrigger.m2",
       "attach": "base",
-      "label": "Tank: barrier blossom"
+      "label": "Tank: barrier blossom",
+      "scale": 30.0,
+      "note": "heal"
     },
     {
+      "id": 90105,
       "name": "lb_fx_burstinglightshard_areatrigger",
       "source": "spells\\fx_burstinglightshard_areatrigger.m2",
       "attach": "base",
-      "label": "Heal: bursting light shards"
+      "label": "Heal: bursting light shards",
+      "skip": true
     },
     {
+      "id": 90106,
       "name": "lb_11fx_arathor_areatrigger05",
       "source": "spells\\11fx_arathor_areatrigger05.m2",
       "attach": "base",
-      "label": "Heal: Arathi area 05"
+      "label": "Heal: Arathi area 05",
+      "note": "texture animations missing (plugin)"
     },
     {
+      "id": 90107,
       "name": "lb_sunwell_beamfx_3s",
       "source": "spells\\sunwell_beamfx_3s.m2",
       "attach": "base",
-      "label": "Heal: Sunwell beam (3 s)"
+      "label": "Heal: Sunwell beam (3 s)",
+      "billboard_upright": true
     },
     {
+      "id": 90108,
       "name": "lb_8fx_jaina_frozenorb_state",
       "source": "spells\\8fx_jaina_frozenorb_state.m2",
       "attach": "base",
-      "label": "Magic: Jaina frozen orb (state)"
+      "label": "Magic: Jaina frozen orb (state)",
+      "remap_effects": true
     },
     {
+      "id": 90109,
       "name": "lb_8fx_jaina_frozenorb_precast",
       "source": "spells\\8fx_jaina_frozenorb_precast.m2",
       "attach": "base",
-      "label": "Magic: Jaina frozen orb (precast)"
+      "label": "Magic: Jaina frozen orb (precast)",
+      "note": "animation stalls then its end repeats"
     },
     {
+      "id": 90110,
       "name": "lb_8fx_jaina_ringoffrost",
       "source": "spells\\8fx_jaina_ringoffrost.m2",
       "attach": "base",
-      "label": "Magic: Jaina ring of frost"
+      "label": "Magic: Jaina ring of frost",
+      "mode": "follow",
+      "note": "cast"
     },
     {
+      "id": 90111,
       "name": "lb_8fx_jaina_glacialray_precast",
       "source": "spells\\8fx_jaina_glacialray_precast.m2",
       "attach": "base",
-      "label": "Magic: Jaina glacial ray (precast)"
+      "label": "Magic: Jaina glacial ray (precast)",
+      "scale": 6.0,
+      "rotation": [
+        0.0,
+        -1.5708,
+        0.0
+      ]
     },
     {
+      "id": 90112,
       "name": "lb_8fx_jaina_icefall_precast",
       "source": "spells\\8fx_jaina_icefall_precast.m2",
       "attach": "base",
-      "label": "Magic: Jaina icefall (precast)"
+      "label": "Magic: Jaina icefall (precast)",
+      "remap_effects": true
     },
     {
+      "id": 90113,
       "name": "lb_cfx_priest_entropicrift_areatrigger",
       "source": "spells\\cfx_priest_entropicrift_areatrigger.m2",
       "attach": "base",
-      "label": "Magic: entropic rift"
+      "label": "Magic: entropic rift",
+      "remap_effects": true
     },
     {
+      "id": 90114,
       "name": "lb_11fx_accretiondisk_areatrigger",
       "source": "spells\\11fx_accretiondisk_areatrigger.m2",
       "attach": "base",
-      "label": "Magic: accretion disk"
+      "label": "Magic: accretion disk",
+      "remap_effects": true
     },
     {
+      "id": 90115,
       "name": "lb_11fx_devour_areatrigger",
       "source": "spells\\11fx_devour_areatrigger.m2",
       "attach": "base",
-      "label": "Magic: devour"
+      "label": "Magic: devour",
+      "skip": true
     },
     {
+      "id": 90116,
       "name": "lb_11fx_devour_areatrigger01",
       "source": "spells\\11fx_devour_areatrigger01.m2",
       "attach": "base",
-      "label": "Magic: devour 01"
+      "label": "Magic: devour 01",
+      "mode": "follow",
+      "note": "cast"
     },
     {
+      "id": 90117,
       "name": "lb_7fx_soulengine_soulwrap",
       "source": "spells\\7fx_soulengine_soulwrap.m2",
       "attach": "base",
-      "label": "Magic: soul engine soulwrap"
+      "label": "Magic: soul engine soulwrap",
+      "skip": true
     },
     {
+      "id": 90118,
       "name": "lb_fx_voidtest_areatrigger01",
       "source": "spells\\fx_voidtest_areatrigger01.m2",
       "attach": "base",
-      "label": "Magic: void test area (test asset)"
+      "label": "Magic: void test area (test asset)",
+      "remap_effects": true
     },
     {
+      "id": 90119,
       "name": "lb_11fx_felinferno_areatrigger02",
       "source": "spells\\11fx_felinferno_areatrigger02.m2",
       "attach": "base",
-      "label": "Magic: fel inferno 02"
+      "label": "Magic: fel inferno 02",
+      "remap_effects": true
     },
     {
+      "id": 90120,
       "name": "lb_7fx_tombofsargeras_councilstar01",
       "source": "spells\\7fx_tombofsargeras_councilstar01.m2",
       "attach": "base",
-      "label": "Magic: council star"
+      "label": "Magic: council star",
+      "mode": "follow",
+      "note": "cast"
     },
     {
+      "id": 90121,
       "name": "lb_7fx_deathtitan_temporalblast_cast",
       "source": "spells\\7fx_deathtitan_temporalblast_cast.m2",
       "attach": "base",
-      "label": "Magic: temporal blast (cast)"
+      "label": "Magic: temporal blast (cast)",
+      "skip": true
     },
     {
+      "id": 90122,
       "name": "lb_7fx_deathtitan_temporalblast_precast",
       "source": "spells\\7fx_deathtitan_temporalblast_precast.m2",
       "attach": "base",
-      "label": "Magic: temporal blast (precast)"
+      "label": "Magic: temporal blast (precast)",
+      "mode": "once",
+      "rotation": [
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "note": "cast, pointing up, played once"
     },
     {
+      "id": 90123,
       "name": "lb_11fx_longdamagevisualareatrigger_areatrigger",
       "source": "spells\\11fx_longdamagevisualareatrigger_areatrigger.m2",
       "attach": "base",
-      "label": "Generic: long damage area"
+      "label": "Generic: long damage area",
+      "skip": true
     },
     {
+      "id": 90124,
       "name": "lb_7fx_kiljaeden_armageddon_meteor_missile",
       "source": "spells\\7fx_kiljaeden_armageddon_meteor_missile.m2",
       "attach": "base",
-      "label": "Physical: Armageddon meteor (missile)"
+      "label": "Physical: Armageddon meteor (missile)",
+      "scale": 30.0,
+      "time_scale": 3.333,
+      "particle_speed": 0.3
     },
     {
+      "id": 90125,
       "name": "lb_7fx_lightforged_vindicaar_leap_impact",
       "source": "spells\\7fx_lightforged_vindicaar_leap_impact.m2",
       "attach": "base",
-      "label": "Physical: Vindicaar leap impact"
+      "label": "Physical: Vindicaar leap impact",
+      "copies": [
+        0.0,
+        1.5708,
+        3.1416,
+        4.7124
+      ],
+      "note": "several at once, rotated"
     },
     {
+      "id": 90126,
       "name": "lb_7fx_tidalwave",
       "source": "spells\\7fx_tidalwave.m2",
       "attach": "base",
-      "label": "Physical: tidal wave"
+      "label": "Physical: tidal wave",
+      "skip": true
     },
     {
+      "id": 90127,
       "name": "lb_7fx_aggramar_flare_precast",
       "source": "spells\\7fx_aggramar_flare_precast.m2",
       "attach": "base",
-      "label": "Physical: Aggramar flare (precast)"
+      "label": "Physical: Aggramar flare (precast)",
+      "remap_effects": true
     },
     {
+      "id": 90128,
       "name": "lb_7fx_aggramar_flare_impact",
       "source": "spells\\7fx_aggramar_flare_impact.m2",
       "attach": "base",
-      "label": "Physical: Aggramar flare (impact)"
+      "label": "Physical: Aggramar flare (impact)",
+      "time_scale": 2.0
     },
     {
+      "id": 90129,
       "name": "lb_7fx_darkmoon_forsakenstage_missile",
       "source": "spells\\7fx_darkmoon_forsakenstage_missile.m2",
-      "attach": "base",
-      "label": "Physical: Darkmoon stage missile"
+      "attach": "chest",
+      "label": "Physical: Darkmoon stage missile",
+      "mode": "follow",
+      "note": "cast, follows the player"
     }
   ]
 }
