@@ -131,6 +131,15 @@ def validate(path, corpus=False):
     most = max([sm['bone_count'] for sm in s['submeshes']] or [0])
     r(s['bone_count_max'] in port.BONE_PALETTES, f'bone palette {s["bone_count_max"]} (client: {port.BONE_PALETTES})')
     r(s['bone_count_max'] >= most, f'bone palette {s["bone_count_max"]} under {most} bones')
+    r(corpus or most <= port.SUBMESH_BONES, f'a submesh animated by {most} bones (at most {port.SUBMESH_BONES})')
+    for i, sm in enumerate(s['submeshes']):
+        start = sm['level'] * 65536 + sm['index_start']
+        lo, hi = sm['vertex_start'], sm['vertex_start'] + sm['vertex_count']
+        r(all(lo <= v < hi for v in s['indices'][start:start + sm['index_count']]),
+          f'submesh {i}: triangles outside its vertices')
+        palette = sm['bone_count']
+        r(all(max(s['bones'][v]) < max(palette, 1) for v in range(lo, min(hi, len(s['bones'])))) or palette == 0,
+          f'submesh {i}: a vertex names a bone past its {palette}')
     nv = len(m['vertices'])
     r(all(v < nv for v in s['vertices']), 'skin vertex past the model vertices')
     r(all(i < len(s['vertices']) for i in s['indices']), 'skin index past the skin vertices')

@@ -51,6 +51,7 @@ PARTICLE_LOAD = 800
 MODEL_LOAD = 2000
 MAX_ANIM_ID = 505
 BONE_PALETTES = (21, 53, 64, 256)          # boneCountMax values of the client's skins
+SUBMESH_BONES = 64                         # bones per submesh at most (split past that)
 
 
 class Fault(Exception):
@@ -88,6 +89,101 @@ class Combos:
                 return len(self.units) - k
         self.units += list(stages)
         return len(self.units) - k
+
+
+def split_submeshes(skin, model, limit):
+    """Submeshes animated by more than `limit` bones cut into several that each
+    use at most `limit` (each with its own run of the bone lookup and its own
+    skin vertices, renumbered to that run); every batch drawing such a
+    submesh drawn once per piece. The client's own spell models never put
+    more than 124 bones on a submesh; a modern one with 138 made the client
+    write past its bone table and crash."""
+    lookup = model['bone_lookup']
+    weights = [v['raw'][12:16] for v in model['vertices']]
+    pieces_of = {}
+    original = list(skin['submeshes'])
+    for si, sm in enumerate(original):
+        if sm['bone_count'] <= limit:
+            continue
+        start = sm['level'] * 65536 + sm['index_start']
+        tris = [skin['indices'][start + k:start + k + 3] for k in range(0, sm['index_count'] - 2, 3)]
+
+        def bones_of(v):
+            local = skin['bones'][v]
+            mv = skin['vertices'][v]
+            return {lookup[sm['bone_combo'] + local[k]] for k in range(4) if weights[mv][k] > 0}
+
+        groups, cur, cur_tris = [], set(), []
+        for tri in tris:
+            used = set().union(*(bones_of(v) for v in tri))
+            if cur_tris and len(cur | used) > limit:
+                groups.append((cur, cur_tris))
+                cur, cur_tris = set(), []
+            cur |= used
+            cur_tris.append(tri)
+        if cur_tris:
+            groups.append((cur, cur_tris))
+
+        pieces = []
+        for bones, gtris in groups:
+            palette = sorted(bones)
+            if len(palette) > limit:
+                raise Fault(f'a triangle of submesh {si} uses more than {limit} bones')
+            combo = len(lookup)
+            lookup.extend(palette)
+            local = {b: i for i, b in enumerate(palette)}
+            remap = {}
+            vstart = len(skin['vertices'])
+            for tri in gtris:
+                for v in tri:
+                    if v not in remap:
+                        remap[v] = len(skin['vertices'])
+                        mv = skin['vertices'][v]
+                        old = skin['bones'][v]
+                        skin['vertices'].append(mv)
+                        skin['bones'].append(tuple(
+                            local[lookup[sm['bone_combo'] + old[k]]] if weights[mv][k] > 0 else 0 for k in range(4)))
+            istart = len(skin['indices'])
+            for tri in gtris:
+                skin['indices'].extend(remap[v] for v in tri)
+            if len(skin['vertices']) > 65535:
+                raise Fault('too many skin vertices after splitting the submeshes')
+            piece = dict(sm)
+            piece.update(vertex_start=vstart, vertex_count=len(skin['vertices']) - vstart,
+                         level=istart // 65536, index_start=istart % 65536, index_count=3 * len(gtris),
+                         bone_combo=combo, bone_count=len(palette))
+            pieces.append(piece)
+        skin['submeshes'][si] = pieces[0]
+        pieces_of[si] = [si]
+        for piece in pieces[1:]:
+            pieces_of[si].append(len(skin['submeshes']))
+            skin['submeshes'].append(piece)
+
+    if pieces_of:
+        out = []
+        for bt in skin['batches']:
+            for si in pieces_of.get(bt['submesh'], [bt['submesh']]):
+                out.append(dict(bt, submesh=si))
+        skin['batches'] = out
+
+
+def compact_skin(skin):
+    """The skin's vertices and triangles laid out again, submesh after
+    submesh, without what no submesh draws any more (the originals of split
+    submeshes)."""
+    verts, bones, indices = [], [], []
+    for sm in skin['submeshes']:
+        start = sm['level'] * 65536 + sm['index_start']
+        vs, vc = sm['vertex_start'], sm['vertex_count']
+        nvs = len(verts)
+        verts.extend(skin['vertices'][vs:vs + vc])
+        bones.extend(skin['bones'][vs:vs + vc])
+        nis = len(indices)
+        indices.extend(i - vs + nvs for i in skin['indices'][start:start + sm['index_count']])
+        sm.update(vertex_start=nvs, level=nis // 65536, index_start=nis % 65536)
+        if nvs > 65535:
+            raise Fault('skin vertices past 65,535')
+    skin['vertices'], skin['bones'], skin['indices'] = verts, bones, indices
 
 
 def convert_batches(skin, model, combos):
@@ -308,6 +404,8 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
 
     skin = m2.read_skin(open(os.path.join(srcdir, manifest['skins'][0]['file']), 'rb').read())
     combos = Combos()
+    split_submeshes(skin, model, SUBMESH_BONES)
+    compact_skin(skin)
     convert_batches(skin, model, combos)
     if combos.combos:
         if combos.combos[0] != 1:                # one-texture batches use the first combo
