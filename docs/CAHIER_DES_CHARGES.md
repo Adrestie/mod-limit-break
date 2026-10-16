@@ -141,7 +141,8 @@ Répartition en couches :
 | Couche | Contenu |
 |---|---|
 | Module C++ | recensement, élection, jauge, paliers, exécution des effets |
-| SQL base monde | barème par défaut, catalogue archétype × palier → sort, archétypes ouverts par classe, liste des boss du 4e segment, lignes `spell_dbc` |
+| Configuration du module (`.conf`) | le barème, seul endroit où il vit : facteurs et seuils (paragraphe 4), relus sans redémarrage |
+| SQL base monde | catalogue archétype × palier → sort, archétypes ouverts par classe, liste des boss du 4e segment, lignes `spell_dbc` |
 | SQL base personnages | les quatre choix de chaque joueur |
 | Lua et AIO, ou addon dédié | HUD, barre segmentée, interface de sélection, bouton |
 | Patch client | finition seulement : nom, icône et infobulle des auras posées sur les alliés, lisibilité du journal de combat. Détachable et repoussable |
