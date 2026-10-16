@@ -1,13 +1,187 @@
 {
-  "export_dir": "C:\\Users\\Arthe\\wow.export",
+  "export_dir": "E:/atelier/limit-break/export",
   "game_dir": "Spells\\LimitBreak",
   "first_id": 90100,
   "visuals": [
-    {"name": "lb_test_egg", "source": "spells\\fx_mediumegg_aura.m2", "attach": "base",
-     "label": "Test: medium egg aura"},
-    {"name": "lb_test_spell42", "source": "spells\\10fx_spell42.m2", "attach": "base",
-     "label": "Test: 10fx spell 42"},
-    {"name": "lb_test_whiplash", "source": "spells\\warlock_whiplash_01.m2", "attach": "chest",
-     "label": "Test: warlock whiplash"}
+    {
+      "name": "lb_7fx_tombofsargeras_raid_cathedral_arcaneshield",
+      "source": "spells\\7fx_tombofsargeras_raid_cathedral_arcaneshield.m2",
+      "attach": "base",
+      "label": "Tank: cathedral arcane shield"
+    },
+    {
+      "name": "lb_fx_aegisofironforge_areatrigger",
+      "source": "spells\\fx_aegisofironforge_areatrigger.m2",
+      "attach": "base",
+      "label": "Tank: aegis of Ironforge"
+    },
+    {
+      "name": "lb_7fx_lightforged_bunker_shield",
+      "source": "spells\\7fx_lightforged_bunker_shield.m2",
+      "attach": "base",
+      "label": "Tank: Lightforged bunker shield"
+    },
+    {
+      "name": "lb_fx_lightshield_areatrigger",
+      "source": "spells\\fx_lightshield_areatrigger.m2",
+      "attach": "base",
+      "label": "Tank: light shield"
+    },
+    {
+      "name": "lb_fx_barrierblossom_areatrigger",
+      "source": "spells\\fx_barrierblossom_areatrigger.m2",
+      "attach": "base",
+      "label": "Tank: barrier blossom"
+    },
+    {
+      "name": "lb_fx_burstinglightshard_areatrigger",
+      "source": "spells\\fx_burstinglightshard_areatrigger.m2",
+      "attach": "base",
+      "label": "Heal: bursting light shards"
+    },
+    {
+      "name": "lb_11fx_arathor_areatrigger05",
+      "source": "spells\\11fx_arathor_areatrigger05.m2",
+      "attach": "base",
+      "label": "Heal: Arathi area 05"
+    },
+    {
+      "name": "lb_sunwell_beamfx_3s",
+      "source": "spells\\sunwell_beamfx_3s.m2",
+      "attach": "base",
+      "label": "Heal: Sunwell beam (3 s)"
+    },
+    {
+      "name": "lb_8fx_jaina_frozenorb_state",
+      "source": "spells\\8fx_jaina_frozenorb_state.m2",
+      "attach": "chest",
+      "label": "Magic: Jaina frozen orb (state)"
+    },
+    {
+      "name": "lb_8fx_jaina_frozenorb_precast",
+      "source": "spells\\8fx_jaina_frozenorb_precast.m2",
+      "attach": "chest",
+      "label": "Magic: Jaina frozen orb (precast)"
+    },
+    {
+      "name": "lb_8fx_jaina_ringoffrost",
+      "source": "spells\\8fx_jaina_ringoffrost.m2",
+      "attach": "base",
+      "label": "Magic: Jaina ring of frost"
+    },
+    {
+      "name": "lb_8fx_jaina_glacialray_precast",
+      "source": "spells\\8fx_jaina_glacialray_precast.m2",
+      "attach": "chest",
+      "label": "Magic: Jaina glacial ray (precast)"
+    },
+    {
+      "name": "lb_8fx_jaina_icefall_precast",
+      "source": "spells\\8fx_jaina_icefall_precast.m2",
+      "attach": "chest",
+      "label": "Magic: Jaina icefall (precast)"
+    },
+    {
+      "name": "lb_cfx_priest_entropicrift_areatrigger",
+      "source": "spells\\cfx_priest_entropicrift_areatrigger.m2",
+      "attach": "base",
+      "label": "Magic: entropic rift"
+    },
+    {
+      "name": "lb_11fx_accretiondisk_areatrigger",
+      "source": "spells\\11fx_accretiondisk_areatrigger.m2",
+      "attach": "base",
+      "label": "Magic: accretion disk"
+    },
+    {
+      "name": "lb_11fx_devour_areatrigger",
+      "source": "spells\\11fx_devour_areatrigger.m2",
+      "attach": "base",
+      "label": "Magic: devour"
+    },
+    {
+      "name": "lb_11fx_devour_areatrigger01",
+      "source": "spells\\11fx_devour_areatrigger01.m2",
+      "attach": "base",
+      "label": "Magic: devour 01"
+    },
+    {
+      "name": "lb_7fx_soulengine_soulwrap",
+      "source": "spells\\7fx_soulengine_soulwrap.m2",
+      "attach": "chest",
+      "label": "Magic: soul engine soulwrap"
+    },
+    {
+      "name": "lb_fx_voidtest_areatrigger01",
+      "source": "spells\\fx_voidtest_areatrigger01.m2",
+      "attach": "base",
+      "label": "Magic: void test area (test asset)"
+    },
+    {
+      "name": "lb_11fx_felinferno_areatrigger02",
+      "source": "spells\\11fx_felinferno_areatrigger02.m2",
+      "attach": "base",
+      "label": "Magic: fel inferno 02"
+    },
+    {
+      "name": "lb_7fx_tombofsargeras_councilstar01",
+      "source": "spells\\7fx_tombofsargeras_councilstar01.m2",
+      "attach": "base",
+      "label": "Magic: council star"
+    },
+    {
+      "name": "lb_7fx_deathtitan_temporalblast_cast",
+      "source": "spells\\7fx_deathtitan_temporalblast_cast.m2",
+      "attach": "chest",
+      "label": "Magic: temporal blast (cast)"
+    },
+    {
+      "name": "lb_7fx_deathtitan_temporalblast_precast",
+      "source": "spells\\7fx_deathtitan_temporalblast_precast.m2",
+      "attach": "chest",
+      "label": "Magic: temporal blast (precast)"
+    },
+    {
+      "name": "lb_11fx_longdamagevisualareatrigger_areatrigger",
+      "source": "spells\\11fx_longdamagevisualareatrigger_areatrigger.m2",
+      "attach": "base",
+      "label": "Generic: long damage area"
+    },
+    {
+      "name": "lb_7fx_kiljaeden_armageddon_meteor_missile",
+      "source": "spells\\7fx_kiljaeden_armageddon_meteor_missile.m2",
+      "attach": "chest",
+      "label": "Physical: Armageddon meteor (missile)"
+    },
+    {
+      "name": "lb_7fx_lightforged_vindicaar_leap_impact",
+      "source": "spells\\7fx_lightforged_vindicaar_leap_impact.m2",
+      "attach": "base",
+      "label": "Physical: Vindicaar leap impact"
+    },
+    {
+      "name": "lb_7fx_tidalwave",
+      "source": "spells\\7fx_tidalwave.m2",
+      "attach": "base",
+      "label": "Physical: tidal wave"
+    },
+    {
+      "name": "lb_7fx_aggramar_flare_precast",
+      "source": "spells\\7fx_aggramar_flare_precast.m2",
+      "attach": "chest",
+      "label": "Physical: Aggramar flare (precast)"
+    },
+    {
+      "name": "lb_7fx_aggramar_flare_impact",
+      "source": "spells\\7fx_aggramar_flare_impact.m2",
+      "attach": "base",
+      "label": "Physical: Aggramar flare (impact)"
+    },
+    {
+      "name": "lb_7fx_darkmoon_forsakenstage_missile",
+      "source": "spells\\7fx_darkmoon_forsakenstage_missile.m2",
+      "attach": "chest",
+      "label": "Physical: Darkmoon stage missile"
+    }
   ]
 }

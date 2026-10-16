@@ -1,0 +1,3 @@
+# Game files rebuilt by tools/m2port/build_visuals.py from the local modern game:
+# Blizzard assets, kept out of the repository.
+data/client/

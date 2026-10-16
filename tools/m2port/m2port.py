@@ -5,7 +5,7 @@ exports it in RAW) back to the 3.3.5a client (MD20, version 264).
     python m2port.py <model.m2 exported by wow.export> <output folder> <new name> [<game folder>]
 
 The output folder receives <new name>.m2, <new name>00.skin and the textures,
-each renamed <new name>_<n>.blp. <game folder> is the folder of the client where
+each named after its source and FileDataID (shared between models). <game folder> is the folder of the client where
 the files will live (default Spells\\LimitBreak): the model names its textures by
 that path.
 
@@ -163,7 +163,10 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
         if not source or not os.path.exists(source):
             report.append(f'texture {i} (FileDataID {fid}) missing from the export')
             continue
-        target = f'{newname}_{i}.blp'
+        # one file per source texture, shared by every model that uses it:
+        # its name, made unique by its FileDataID
+        base = os.path.splitext(os.path.basename(source))[0].lower()
+        target = base + '.blp' if base.endswith(str(fid)) else f'{base}_{fid}.blp'
         shutil.copyfile(source, os.path.join(outdir, target))
         path = (gamedir + '\\' + target).encode('ascii') + b'\0'
         sofs_ = append(md, path, 4)
