@@ -258,7 +258,6 @@ Aucune modification du cœur n'est nécessaire.
 |---|---|
 | Valeurs des trois facteurs et des quatre seuils | réglage |
 | Ce qui compte dans le barème : familiers, totems et gardiens, mannequins d'entraînement, dégâts d'environnement, duels, soins sur soi | règle |
-| Liste des boss ouvrant le 4e segment, et difficultés concernées | contenu |
 | Temps d'incantation du déclenchement, et son interruptibilité | règle, jamais abordée |
 | PvP sauvage en monde ouvert : les champs de bataille et arènes sont désactivés, mais le PvP en zone contestée alimenterait la jauge | règle, conséquence non tranchée de l'ouverture au monde ouvert |
 | Visuels définitifs des effets : les visuels du client 3.3.5 sont retenus en attendant (paragraphe 17) ; en créer imposerait un patch client | production |
@@ -269,8 +268,8 @@ Aucun de ces points ne remet en cause la faisabilité : ce sont des contenus, de
 réglages et trois règles de jeu, pas des mécanismes.
 
 Tranchés le 2026-10-16 et retirés de cette liste : l'affichage du HUD hors du
-conteneur élu (paragraphe 9), les archétypes ouverts par classe et les seize
-effets (paragraphe 17).
+conteneur élu (paragraphe 9), les archétypes ouverts par classe, les seize
+effets et la liste des boss du 4e segment (paragraphe 17).
 
 ## 17. Contenu tranché le 2026-10-16
 
@@ -326,3 +325,15 @@ effets (paragraphe 17).
 | Physique | 2 | 90006 Assaut | 12 × PA en 3 impacts, à 8 m | Tempête de lames |
 | Physique | 3 | 90007 Armageddon | 25 × PA en 8 météores sur 4 s, à 12 m | Pluie de feu |
 | Physique | 4 | 90008 Ragnarök | Armageddon, et l'armure de la cible baisse de 20 % pendant 15 s | Pluie de feu |
+
+### Boss ouvrant le 4e segment
+
+Par défaut, tous les boss de raid de Wrath of the Lich King, en toutes
+difficultés : Onyxia, Naxxramas, le Sanctum obsidien, l'Œil de l'éternité, le
+Caveau d'Archavon, Ulduar, l'Épreuve du croisé, la Citadelle de la Couronne de
+glace et le Sanctum rubis. Une créature garde son entrée normale dans toutes les
+difficultés : une ligne par boss suffit. Les rencontres à plusieurs créatures
+(Quatre cavaliers, Assemblée du fer, Conseil des princes de sang, Champions des
+factions, Jumelles val'kyr, capitaines de la Bataille des canonnières, véhicules
+de Mimiron) listent chaque créature engageable. Liste dans
+`data/sql/db-world/base/06_limit_break_bosses.sql` (110 entrées).

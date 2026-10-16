@@ -8,9 +8,8 @@
 --
 -- The content of the archetype and catalogue tables is written by
 -- 05_limit_break_content.sql (decided 2026-10-16), the module's spells by
--- 04_limit_break_spells.sql (ids 90000-90999). The boss list is NOT decided yet
--- (docs/CAHIER_DES_CHARGES.md, §16) and ships empty: the fourth segment never
--- opens until it is filled.
+-- 04_limit_break_spells.sql (ids 90000-90999), the boss list by
+-- 06_limit_break_bosses.sql.
 
 CREATE TABLE IF NOT EXISTS `mod_limit_break_archetype` (
   `id` TINYINT UNSIGNED NOT NULL,
@@ -59,9 +58,3 @@ CREATE TABLE IF NOT EXISTS `mod_limit_break_boss` (
   PRIMARY KEY (`entry`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='LimitBreak: bosses opening the fourth segment';
-
--- TO TRY THE FOURTH SEGMENT before the boss list exists -- not applied, copy
--- by hand into the world database, then `.reload config`:
---
--- INSERT INTO `mod_limit_break_boss` (`entry`, `difficulty_mask`, `comment`) VALUES
---   (10184, 15, 'TEST ONLY: Onyxia');

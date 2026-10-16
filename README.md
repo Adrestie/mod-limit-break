@@ -14,8 +14,7 @@ in French; it is the only reference of the module.
 
 ## Status: milestone 2, the sixteen effects
 
-The mechanism and the effects are written; the scale and the boss list are
-not. What is still undecided in the specification (§16) ships empty or
+The mechanism, the effects and the boss list are written; the scale is not. What is still undecided in the specification (§16) ships empty or
 neutral, and is listed below.
 
 Written:
@@ -56,6 +55,8 @@ Written:
   effect in progress. Visuals are the 3.3.5 client's own (spell visual kits,
   and the ground objects of the game's area spells): no client patch.
 * **Archetypes per class** (`data/sql/db-world/base/05_limit_break_content.sql`).
+* **Bosses of the fourth segment**: every Wrath of the Lich King raid boss, in
+  every difficulty (`data/sql/db-world/base/06_limit_break_bosses.sql`).
 
 Still to decide (§16), shipped neutral or empty:
 
@@ -64,8 +65,6 @@ Still to decide (§16), shipped neutral or empty:
 * what counts: pets, totems and guardians, self-healing, environment damage,
   duels and world PvP (`LimitBreak.Count.*` switches, all on meanwhile);
   training dummies are not told apart;
-* the bosses of the fourth segment and their difficulties
-  (`mod_limit_break_boss`, empty);
 * the cast time of the trigger and whether it can be interrupted (instant
   meanwhile), and whether a dead player may trigger (refused meanwhile);
 * final effect visuals (3.3.5 client visuals meanwhile);
@@ -92,8 +91,8 @@ Still to decide (§16), shipped neutral or empty:
 | `.limitbreak info` | player | the group's gauge in the chat |
 | `.limitbreak fill <points>` | game master | add points, for tests |
 
-To try the fourth segment before the boss list exists, `data/sql/db-world/base/01_limit_break_world.sql`
-ends with a commented test row.
+`.limitbreak debug` (game master) shows what the module sees for a player:
+container key, census of the map, engaged bosses, participation.
 
 Original module, GPL-2.0-or-later, the licence of AzerothCore it is compiled
 into.
