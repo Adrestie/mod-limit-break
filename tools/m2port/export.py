@@ -2,7 +2,7 @@
 export -- takes spell models out of the local modern game, as wow.export would
 in RAW: the model, its skins and its textures, and a manifest naming them.
 
-    python export.py <install folder> <listfile.csv> <output folder> <model path> [...]
+    python export.py <install folder | cdn:<cache folder>> <listfile.csv> <output folder> <model path> [...]
 
 <model path> as in the listfile, e.g. spells/fx_aegisofironforge_areatrigger.m2.
 Each model lands in <output folder>/spells/: <name>.m2, <name>.manifest.json,
@@ -93,7 +93,11 @@ def export(casc, by_name, by_id, out, model_path):
 
 if __name__ == '__main__':
     install, listfile, out = sys.argv[1:4]
-    casc = Casc(install)
+    if install.startswith('cdn:'):               # cdn:<cache folder>: Blizzard's CDN
+        from cdn import Cdn
+        casc = Cdn(install[4:])
+    else:
+        casc = Casc(install)
     by_name, by_id = load_listfile(listfile)
     for path in sys.argv[4:]:
         try:
