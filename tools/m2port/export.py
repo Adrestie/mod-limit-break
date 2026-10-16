@@ -68,8 +68,20 @@ def export(casc, by_name, by_id, out, model_path):
             manifest['textures'].append({'fileDataID': tid, 'file': file})
         except CascError as e:
             notes.append(f'texture {tid}: {e}')
-    if chunk_ids(m2, b'AFID'):
-        notes.append('has external animations (AFID)')
+    # external animations: AFID is (animation id u16, variation u16, FileDataID u32)
+    afid = chunk_ids(m2, b'AFID')
+    manifest['anims'] = []
+    for k in range(0, len(afid), 2):
+        anim_id, variation = afid[k] & 0xFFFF, afid[k] >> 16
+        fid_ = afid[k + 1]
+        if not fid_:
+            continue
+        file = f'{name}{anim_id:04d}-{variation:02d}.anim'
+        try:
+            open(os.path.join(folder, file), 'wb').write(casc.read_fid(fid_))
+            manifest['anims'].append({'animID': anim_id, 'subAnimID': variation, 'fileDataID': fid_, 'file': file})
+        except CascError as e:
+            notes.append(f'animation {anim_id}-{variation}: {e}')
     json.dump(manifest, open(os.path.join(folder, name + '.manifest.json'), 'w'), indent=1)
     return notes
 
