@@ -13,7 +13,9 @@
     "src/limit_break_loader.cpp"
   ],
   "exclude_from_sources": [
-    "data/lua"
+    "data/lua",
+    "data/client",
+    "tools"
   ],
   "configuration": {
     "file": "mod-limit-break.conf",
