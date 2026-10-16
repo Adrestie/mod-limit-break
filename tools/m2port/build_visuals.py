@@ -4,9 +4,9 @@ build_visuals -- the module's backported visuals, from visuals.json to the packa
     python build_visuals.py
 
 For each visual of visuals.json, numbered from first_id (tranche 90):
-  - the model, its skin and textures, rebuilt for 3.3.5 by port.py into
-    data/client/<game_dir>, then checked by validate.py: one refused model
-    stops the build, nothing is written into installer.json;
+  - the modern model, its skins, animations and textures, laid out by pack.py
+    into data/client/<game_dir> for WarcraftXL's modern M2 plugin (no
+    conversion: the client needs WarcraftXL);
   - SpellVisualEffectName (the model), SpellVisualKit (the model on the base or
     the chest of the unit), SpellVisual (that kit as the state of an aura): one
     row each, same number, written into installer.json;
@@ -27,8 +27,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, HERE)
-import port  # noqa: E402
-import validate  # noqa: E402
+import pack  # noqa: E402
 
 ONE = struct.unpack('<i', struct.pack('<f', 1.0))[0]
 MIN_SCALE = struct.unpack('<i', struct.pack('<f', 0.01))[0]
@@ -57,10 +56,7 @@ def main():
     for i, v in enumerate(conf['visuals']):
         vid = conf['first_id'] + i
         src = os.path.join(conf['export_dir'], v['source'])
-        notes = port.port(src, out_dir, v['name'], game_dir)
-        faults = validate.validate(os.path.join(out_dir, v['name'] + '.m2'))
-        if faults:
-            sys.exit(f"{v['name']} refused by validate.py: " + '; '.join(faults[:10]))
+        notes = pack.pack(src, out_dir, v['name'], game_dir)
         for n in notes:
             print(f"{v['name']}: {n}")
 

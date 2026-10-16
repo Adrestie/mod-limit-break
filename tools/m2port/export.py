@@ -52,11 +52,16 @@ def export(casc, by_name, by_id, out, model_path):
     open(os.path.join(folder, name + '.m2'), 'wb').write(m2)
 
     manifest = {'fileDataID': fid, 'textures': [], 'skins': [], 'lodSkins': []}
+    # SFID: the views first (as many as the header's num_skin), then the levels of detail
+    o = m2.find(b'MD20')
+    views = struct.unpack_from('<I', m2, o + 0x44)[0] if o >= 0 else 1
     for i, sid in enumerate(chunk_ids(m2, b'SFID')):
-        file = f'{name}{i:02d}.skin'
+        if not sid:
+            continue
+        lod = i >= views
+        file = f'{name}_lod{i - views + 1:02d}.skin' if lod else f'{name}{i:02d}.skin'
         open(os.path.join(folder, file), 'wb').write(casc.read_fid(sid))
-        manifest['skins'].append({'fileDataID': sid, 'file': file})
-        break                                    # the first view is enough for 3.3.5
+        manifest['lodSkins' if lod else 'skins'].append({'fileDataID': sid, 'file': file})
     notes = []
     for tid in chunk_ids(m2, b'TXID'):
         if tid == 0:

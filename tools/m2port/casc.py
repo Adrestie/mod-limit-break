@@ -115,20 +115,35 @@ class Casc:
 
     # --- configuration ------------------------------------------------------
     def _build_config(self, install, product):
+        def read(path):
+            conf = {}
+            for l in open(path, encoding='utf-8', errors='replace'):
+                if ' = ' in l:
+                    k, v = l.strip().split(' = ', 1)
+                    conf[k] = v
+            return conf
+
         lines = open(os.path.join(install, '.build.info'), encoding='utf-8').read().splitlines()
         names = [h.split('!')[0] for h in lines[0].split('|')]
         for line in lines[1:]:
             row = dict(zip(names, line.split('|')))
             if row.get('Product') == product and row.get('Active') == '1':
                 key = row['Build Key']
-                path = os.path.join(self.data_dir, 'config', key[:2], key[2:4], key)
-                conf = {}
-                for l in open(path, encoding='utf-8'):
-                    if ' = ' in l:
-                        k, v = l.strip().split(' = ', 1)
-                        conf[k] = v
-                return conf
-        raise CascError(f'no active build of product {product}')
+                return read(os.path.join(self.data_dir, 'config', key[:2], key[2:4], key))
+        # the launcher drops a product from .build.info while it updates it: the
+        # newest build configuration of that product left in Data\config serves
+        marker = {'wow': '_Retail', 'wow_classic_beta': 'Classic'}.get(product, product)
+        found = []
+        for path in glob.glob(os.path.join(self.data_dir, 'config', '*', '*', '*')):
+            try:
+                conf = read(path)
+            except OSError:
+                continue
+            if marker in conf.get('build-name', '') and 'root' in conf and 'encoding' in conf:
+                found.append((os.path.getmtime(path), conf))
+        if found:
+            return max(found, key=lambda x: x[0])[1]
+        raise CascError(f'no build of product {product}')
 
     # --- local indices: encoding key (9 bytes) -> archive, offset, size ------
     def _load_indices(self):
