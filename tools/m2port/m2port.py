@@ -119,6 +119,47 @@ def convert_gravity(md, track_ofs):
             struct.pack_into('<f', md, o + k * 4, -(dz * mag))
 
 
+def convert_skin(skin):
+    """A modern skin made readable by 3.3.5, after MultiConverter's SkinFix
+    (MultiConverterLib/SkinFix.cs), without its blend overrides: every batch
+    keeps one texture and shader 0, and its texture coordinates come from the
+    texture unit lookup built here (0: first UV set, -1: environment map).
+    Modern models leave that lookup empty, where the old client reads it for
+    every batch: a null read and a crash at load."""
+    if skin[:4] != b'SKIN':
+        raise Fault('skin without its SKIN magic')
+    scount, sofs = struct.unpack_from('<II', skin, 0x1C)
+    bcount, bofs = struct.unpack_from('<II', skin, 0x24)
+
+    bad = set()
+    most = 21
+    for i in range(scount):
+        pos = sofs + i * 48
+        if struct.unpack_from('<H', skin, pos + 2)[0] > 0:    # past 65,535 indices: dropped
+            skin[pos + 2:pos + 0x14] = bytes(0x12)
+            bad.add(i)
+        elif skin[pos + 0x10] == 0:
+            skin[pos + 0x10] = 1                             # bone influences
+        skin[pos + 0x11] = 0
+        most = max(most, struct.unpack_from('<H', skin, pos + 12)[0])
+
+    lookup = []
+    for i in range(bcount):
+        o = bofs + i * 24
+        shader = struct.unpack_from('<H', skin, o + 2)[0]
+        skin[o] &= 0x10
+        unit = -1 if (shader < 0x8000 and shader & 0x80) else 0
+        if unit not in lookup:
+            lookup.append(unit)
+        struct.pack_into('<H', skin, o + 2, 0)                     # shader
+        struct.pack_into('<H', skin, o + 0x0E, 1)                  # textureCount
+        struct.pack_into('<H', skin, o + 0x12, lookup.index(unit))  # textureCoordComboIndex
+
+    # boneCountMax: modern skins leave it at 0
+    struct.pack_into('<I', skin, 0x2C, max(struct.unpack_from('<I', skin, 0x2C)[0], most))
+    return skin, lookup or [0]
+
+
 def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
     b = open(src, 'rb').read()
     if b[:4] != b'MD21':
@@ -151,6 +192,9 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
         if not sflags & SEQ_EMBEDDED:
             raise Fault(f'sequence {i} keeps its keys in an .anim file: not handled')
         struct.pack_into('<I', md, sofs + i * SEQUENCE + 12, sflags & 0x7F)
+        # one blend time in 3.3.5 where modern clients keep two halves
+        blend = struct.unpack_from('<I', md, sofs + i * SEQUENCE + 0x1C)[0]
+        struct.pack_into('<I', md, sofs + i * SEQUENCE + 0x1C, blend & 0xFFFF)
 
     # --- textures: a path for each FileDataID -------------------------------
     tcount, tofs = array(md, fields, 'textures')
@@ -176,7 +220,9 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
     mcount, mofs = array(md, fields, 'materials')
     for i in range(mcount):
         mflags, blend = struct.unpack_from('<HH', md, mofs + i * 4)
-        struct.pack_into('<HH', md, mofs + i * 4, mflags & 0x1F, blend if blend <= 6 else 4)
+        if blend > 6:                            # "blend add": add, unlit and unfogged
+            blend, mflags = 4, mflags | 0x5
+        struct.pack_into('<HH', md, mofs + i * 4, mflags & 0x1F, blend)
 
     # --- particle emitters: 492 bytes -> 476 --------------------------------
     pcount, pofs = array(md, fields, 'particle_emitters')
@@ -198,9 +244,33 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
             tail = struct.unpack_from('<I', new, 332)[0]
             new[44] = 0
             new[45] = 1 if (tail and not head) else 0
+            new[24:40] = bytes(16)               # geometry and recursion models
             struct.pack_into('<I', new, 4, flags & 0x007FFFFF)
             out += new
         set_array(md, fields, 'particle_emitters', pcount, append(md, out))
+
+    # the animation lookup (animation ID -> first sequence of that ID): the old
+    # client finds a sequence through it; modern models may leave it empty
+    lcount, _ = array(md, fields, 'sequence_lookups')
+    ids = [struct.unpack_from('<H', md, sofs + i * SEQUENCE)[0] for i in range(scount)]
+    if ids and lcount <= max(ids):
+        lookup = [-1] * (max(ids) + 1)
+        for i, anim in enumerate(ids):
+            if lookup[anim] == -1:
+                lookup[anim] = i
+        data = struct.pack('<%dh' % len(lookup), *lookup)
+        set_array(md, fields, 'sequence_lookups', len(lookup), append(md, data, 4))
+
+    # cameras: a spell effect has no use for them, and their layout changed
+    set_array(md, fields, 'cameras', 0, 0)
+    set_array(md, fields, 'camera_lookup', 0, 0)
+
+    # --- skin, and the texture unit lookup the old client reads per batch ---
+    skin_src = os.path.join(srcdir, manifest['skins'][0]['file'])
+    skin, unit_lookup = convert_skin(bytearray(open(skin_src, 'rb').read()))
+    data = struct.pack('<%dh' % len(unit_lookup), *unit_lookup)
+    set_array(md, fields, 'texture_unit_lookup', len(unit_lookup), append(md, data, 4))
+    open(os.path.join(outdir, newname + '00.skin'), 'wb').write(skin)
 
     # --- header --------------------------------------------------------------
     struct.pack_into('<I', md, 4, 264)
@@ -211,28 +281,6 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
     set_array(md, fields, 'name', len(name), append(md, name, 4))
 
     open(os.path.join(outdir, newname + '.m2'), 'wb').write(md)
-
-    # --- skin ---------------------------------------------------------------
-    skin_src = os.path.join(srcdir, manifest['skins'][0]['file'])
-    skin = bytearray(open(skin_src, 'rb').read())
-    if skin[:4] != b'SKIN':
-        raise Fault('skin without its SKIN magic')
-    scount_, sofs_ = struct.unpack_from('<II', skin, 4 + 8 * 3)
-    bcount, bofs = struct.unpack_from('<II', skin, 4 + 8 * 4)
-    for i in range(bcount):
-        o = bofs + i * 24
-        skin[o] &= 0x1F                                         # flags of 3.3.5
-        tex_count = struct.unpack_from('<H', skin, o + 14)[0]
-        struct.pack_into('<H', skin, o + 2, 0)                  # shader_id
-        if tex_count > 1:
-            struct.pack_into('<H', skin, o + 14, 1)             # textureCount
-    # boneCountMax: modern skins leave it at 0, the old client needs the most
-    # bones a submesh uses (21 at least, its usual value)
-    most = 21
-    for i in range(scount_):
-        most = max(most, struct.unpack_from('<H', skin, sofs_ + i * 48 + 12)[0])
-    struct.pack_into('<I', skin, 4 + 8 * 5, max(struct.unpack_from('<I', skin, 4 + 8 * 5)[0], most))
-    open(os.path.join(outdir, newname + '00.skin'), 'wb').write(skin)
 
     return report
 
