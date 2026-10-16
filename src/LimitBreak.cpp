@@ -349,7 +349,7 @@ namespace LimitBreak
 
     void OnHeal(Unit* healer, Unit* receiver, uint32 gain)
     {
-        if (!sConfig.enabled || !gain || !receiver || !receiver->GetMaxHealth())
+        if (!sConfig.enabled || tInOwnEffect || !gain || !receiver || !receiver->GetMaxHealth())
             return;
 
         Player* player = CreditedPlayer(healer);
@@ -365,7 +365,7 @@ namespace LimitBreak
 
     void OnDamage(Unit* attacker, Unit* victim, uint32 damage)
     {
-        if (!sConfig.enabled || !damage || !victim)
+        if (!sConfig.enabled || tInOwnEffect || !damage || !victim)
             return;
 
         // Sans attaquant, ou contre soi-meme : degats d'environnement.
@@ -715,14 +715,29 @@ namespace LimitBreak
             return;
         }
 
-        // Le serveur lance l'effet : aucun sort n'a besoin d'exister cote
-        // client. Instantane tant que le temps d'incantation n'est pas
-        // decide (§16).
-        Unit* target = player;
-        if (spellInfo->NeedsExplicitUnitTarget())
-            if (Unit* selected = player->GetSelectedUnit())
-                target = selected;
-        player->CastSpell(target, spell, TRIGGERED_FULL_MASK);
+        // Un effet offensif sans cible hostile est refuse, et la jauge n'est
+        // pas depensee.
+        Unit* target = nullptr;
+        if (NeedsHostileTarget(spell))
+        {
+            target = HostileTargetOf(player);
+            if (!target)
+            {
+                Say(handler, TEXT_NO_TARGET);
+                return;
+            }
+        }
+
+        // Le serveur execute l'effet : aucun sort n'a besoin d'exister cote
+        // client. Instantane (temps d'incantation non retenu). Tous les
+        // participants du conteneur, morts compris.
+        std::vector<Player*> participants;
+        for (ObjectGuid const& guid : gauge.participants)
+            if (Player* participant = ObjectAccessor::GetPlayer(player->GetMap(), guid))
+                if (KeyOf(participant) == gauge.container)
+                    participants.push_back(participant);
+
+        ExecuteEffect(player, group->GetGUID(), spell, participants, target);
 
         // Remise a zero, quel que soit le depassement. Les requetes sont
         // traitees l'une apres l'autre : un seul usage a la fois.
@@ -792,17 +807,30 @@ namespace LimitBreak
         sTimer = sConfig.updateInterval;
     }
 
-    // R : le catalogue repart de zero ; C;palier;archetype;sort pour chaque
+    // R : le catalogue repart de zero ; C;palier;archetype;sort;nom pour chaque
     // effet ouvert a la classe ; K;choix1;choix2;choix3;choix4 pour finir.
     void SendCatalog(Player* player)
     {
         if (!sConfig.enabled || IsBot(player))
             return;
 
+        // Le nom vient du serveur : le client ne connait pas les sorts du module.
+        LocaleConstant locale = player->GetSession()->GetSessionDbcLocale();
         SendAddon(player, "R");
         for (Effect const& effect : sEffects)
             if (IsOpenToClass(effect.archetype, player->getClass()))
-                SendAddon(player, Acore::StringFormat("C;{};{};{}", uint32(effect.tier), uint32(effect.archetype), effect.spell));
+            {
+                std::string name;
+                if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(effect.spell))
+                {
+                    char const* text = spellInfo->SpellName[locale];
+                    if (!text || !*text)
+                        text = spellInfo->SpellName[LOCALE_enUS];
+                    name = text ? text : "";
+                    name.erase(std::remove(name.begin(), name.end(), ';'), name.end());
+                }
+                SendAddon(player, Acore::StringFormat("C;{};{};{};{}", uint32(effect.tier), uint32(effect.archetype), effect.spell, name));
+            }
 
         ObjectGuid guid = player->GetGUID();
         SendAddon(player, Acore::StringFormat("K;{};{};{};{}",

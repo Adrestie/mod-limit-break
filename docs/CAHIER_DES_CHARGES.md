@@ -258,14 +258,71 @@ Aucune modification du cœur n'est nécessaire.
 |---|---|
 | Valeurs des trois facteurs et des quatre seuils | réglage |
 | Ce qui compte dans le barème : familiers, totems et gardiens, mannequins d'entraînement, dégâts d'environnement, duels, soins sur soi | règle |
-| Liste des archétypes ouverts par classe, pour les dix classes | contenu |
-| Les 16 effets, soit 4 archétypes × 4 paliers | contenu, poste le plus lourd |
 | Liste des boss ouvrant le 4e segment, et difficultés concernées | contenu |
 | Temps d'incantation du déclenchement, et son interruptibilité | règle, jamais abordée |
 | PvP sauvage en monde ouvert : les champs de bataille et arènes sont désactivés, mais le PvP en zone contestée alimenterait la jauge | règle, conséquence non tranchée de l'ouverture au monde ouvert |
-| Visuels des effets : réutiliser des visuels existants ou en créer | production, impacte le besoin de patch client |
+| Visuels définitifs des effets : les visuels du client 3.3.5 sont retenus en attendant (paragraphe 17) ; en créer imposerait un patch client | production |
 | Interaction avec l'autobalance et le Mythic+ | équilibrage |
 | Canal du HUD : AIO, ou addon dédié sur le canal de commandes addon | implémentation |
 
 Aucun de ces points ne remet en cause la faisabilité : ce sont des contenus, des
 réglages et trois règles de jeu, pas des mécanismes.
+
+Tranchés le 2026-10-16 et retirés de cette liste : l'affichage du HUD hors du
+conteneur élu (paragraphe 9), les archétypes ouverts par classe et les seize
+effets (paragraphe 17).
+
+## 17. Contenu tranché le 2026-10-16
+
+### Archétypes ouverts par classe
+
+| Classe | Soin | Dégâts physiques | Dégâts magiques | Tank |
+|---|---|---|---|---|
+| Guerrier | | oui | | oui |
+| Paladin | oui | oui | | oui |
+| Chasseur | | oui | | |
+| Voleur | | oui | | |
+| Prêtre | oui | | oui | |
+| Chevalier de la mort | | oui | | oui |
+| Chaman | oui | oui | oui | |
+| Mage | | | oui | |
+| Démoniste | | | oui | |
+| Druide | oui | oui | oui | oui |
+
+### Principes communs aux seize effets
+
+- Les effets de groupe touchent tous les participants du conteneur élu, morts
+  compris pour les résurrections.
+- Les effets offensifs partent de la cible hostile actuelle du lanceur. Sans
+  cible hostile, le déclenchement est refusé et la jauge n'est **pas** dépensée.
+- Soins et boucliers en % des points de vie maximaux. Dégâts en multiple de la
+  puissance des sorts (PS, magiques, sans résistance) ou de la puissance
+  d'attaque (PA, physiques, sans armure).
+- Aucun cumul : un nouvel usage du groupe remplace l'effet en cours (zones et
+  répétitions arrêtées, auras de tank retirées).
+- Les effets du module ne remplissent pas la jauge.
+- Visuels : ceux déjà présents dans le client 3.3.5, sans patch client. Les
+  répétitions d'impacts sont faites par le serveur.
+- Sorts du module : tranche 90 (90001-90016 pour le catalogue, 90020-90023 pour
+  les auras posées sur les ennemis).
+
+### Les seize effets
+
+| Archétype | Palier | Sort | Effet | Visuel (sort du jeu) |
+|---|---|---|---|---|
+| Tank | 1 | 90013 Rempart | chaque participant : −25 % de dégâts subis, 8 s | Mur protecteur |
+| Tank | 2 | 90014 Égide | −45 % de dégâts subis, 10 s | Gardien divin |
+| Tank | 3 | 90015 Dernier rempart | −70 % de dégâts subis et insensible aux étourdissements, 10 s | Zone anti-magie |
+| Tank | 4 | 90016 Bastion éternel | −70 % de dégâts subis, impossible de tomber sous 1 PV, 8 s | Esprit gardien |
+| Soin | 1 | 90001 Souffle de vie | 35 % des PV max, instantané | Prière de soins |
+| Soin | 2 | 90002 Renouveau | 70 % des PV max, dissipe un effet magique néfaste | Hymne divin |
+| Soin | 3 | 90003 Aube | 100 % des PV, 25 % de la ressource ; les morts se relèvent à 25 % des PV | Résurrection, Hymne divin |
+| Soin | 4 | 90004 Puits de lumière | Aube, les morts se relèvent à 50 % ; puis zone de 5 % des PV max par seconde pendant 10 s | Consécration |
+| Magique | 1 | 90009 Éclat de givre | 10 × PS de givre à 8 m autour de la cible, ralentit de 50 % pendant 4 s | Nova de givre |
+| Magique | 2 | 90010 Orbe glaciale | 25 × PS de givre en 6 s, à 10 m, ralentit | Blizzard |
+| Magique | 3 | 90011 Faille entropique | 50 × PS d'ombre en 8 s, à 12 m | Mort et décomposition |
+| Magique | 4 | 90012 Dévoration cosmique | Faille entropique, et la cible principale subit 15 % de dégâts magiques de plus pendant 15 s | Mort et décomposition |
+| Physique | 1 | 90005 Fracas | 5 × PA à 5 m, étourdit 2 s (pas les boss) | Coup de tonnerre |
+| Physique | 2 | 90006 Assaut | 12 × PA en 3 impacts, à 8 m | Tempête de lames |
+| Physique | 3 | 90007 Armageddon | 25 × PA en 8 météores sur 4 s, à 12 m | Pluie de feu |
+| Physique | 4 | 90008 Ragnarök | Armageddon, et l'armure de la cible baisse de 20 % pendant 15 s | Pluie de feu |

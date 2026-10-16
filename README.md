@@ -12,10 +12,11 @@ spends it, and no distance is ever measured.
 The design is written down in [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md),
 in French; it is the only reference of the module.
 
-## Status: milestone 1, the mechanism
+## Status: milestone 2, the sixteen effects
 
-The mechanism is written; the content is not. What is still undecided in the
-specification (§16) ships empty or neutral, and is listed below.
+The mechanism and the effects are written; the scale and the boss list are
+not. What is still undecided in the specification (§16) ships empty or
+neutral, and is listed below.
 
 Written:
 
@@ -46,6 +47,16 @@ Written:
   the commands above. A member outside the elected container is not
   eligible and sees no bar at all; a paused gauge stays visible.
 
+* **Effects** (`src/LimitBreakEffects.cpp`, specification §17): four
+  archetypes (heal, physical damage, magic damage, tank) times four tiers, run
+  by the server. Auras are `spell_dbc` rows 90001-90023; healing is a share of
+  max health, damage a multiple of spell power or attack power, ignoring
+  resistances and armor; offensive effects start from the caster's hostile
+  target and are refused, gauge kept, without one; a new use replaces the
+  effect in progress. Visuals are the 3.3.5 client's own (spell visual kits,
+  and the ground objects of the game's area spells): no client patch.
+* **Archetypes per class** (`data/sql/db-world/base/05_limit_break_content.sql`).
+
 Still to decide (§16), shipped neutral or empty:
 
 * the three factors and four thresholds (`conf`: factors 1.0, thresholds
@@ -53,14 +64,12 @@ Still to decide (§16), shipped neutral or empty:
 * what counts: pets, totems and guardians, self-healing, environment damage,
   duels and world PvP (`LimitBreak.Count.*` switches, all on meanwhile);
   training dummies are not told apart;
-* the archetypes of each class (`mod_limit_break_class_archetype`, empty);
-* the sixteen effects (`mod_limit_break_effect`, empty) and their spells in
-  `spell_dbc` (ids 90000-90999);
 * the bosses of the fourth segment and their difficulties
   (`mod_limit_break_boss`, empty);
 * the cast time of the trigger and whether it can be interrupted (instant
   meanwhile), and whether a dead player may trigger (refused meanwhile);
-* effect visuals, autobalance and Mythic+ interaction.
+* final effect visuals (3.3.5 client visuals meanwhile);
+* autobalance and Mythic+ interaction.
 
 ## Layout
 
@@ -83,8 +92,8 @@ Still to decide (§16), shipped neutral or empty:
 | `.limitbreak info` | player | the group's gauge in the chat |
 | `.limitbreak fill <points>` | game master | add points, for tests |
 
-To try the mechanism before the content exists, `data/sql/db-world/base/01_limit_break_world.sql`
-ends with commented test rows (game spells as stand-ins).
+To try the fourth segment before the boss list exists, `data/sql/db-world/base/01_limit_break_world.sql`
+ends with a commented test row.
 
 Original module, GPL-2.0-or-later, the licence of AzerothCore it is compiled
 into.

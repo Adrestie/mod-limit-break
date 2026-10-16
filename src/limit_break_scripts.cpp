@@ -89,6 +89,12 @@ public:
         LimitBreak::OnDamage(attacker, victim, damage);
     }
 
+    // Toujours appele (pas de drapeau de hook) : Bastion eternel.
+    uint32 DealDamage(Unit* /*attacker*/, Unit* victim, uint32 damage, DamageEffectType /*type*/) override
+    {
+        return victim ? ModifyDamage(victim, damage) : damage;
+    }
+
     void OnUnitEnterCombat(Unit* unit, Unit* /*victim*/) override
     {
         OnEnterCombat(unit);

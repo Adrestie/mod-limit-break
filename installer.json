@@ -34,6 +34,10 @@
       ],
       "rows": [
         {
+          "table": "character_aura",
+          "where": "spell BETWEEN 90000 AND 90999"
+        },
+        {
           "table": "updates",
           "where": "name IN ({sql_files:db-characters})"
         }
@@ -47,6 +51,10 @@
         "mod_limit_break_boss"
       ],
       "rows": [
+        {
+          "table": "spell_dbc",
+          "where": "ID BETWEEN 90000 AND 90999"
+        },
         {
           "table": "module_string",
           "where": "module = 'mod-limit-break'"

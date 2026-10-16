@@ -92,10 +92,11 @@ local state = {
 local catalog = {}                          -- catalog[tier] = { {archetype, spell}, ... }
 local choices = { 0, 0, 0, 0 }
 local archetypeOf = {}                      -- archetypeOf[spell] = archetype
+local spellNames = {}                       -- spellNames[spell] = name sent by the module
 
 local function SpellLabel(spell)
-    local name = GetSpellInfo(spell)
-    if name then
+    local name = spellNames[spell] or GetSpellInfo(spell)
+    if name and name ~= "" then
         return name
     end
     local archetype = archetypeOf[spell]
@@ -230,7 +231,7 @@ local function PickerButton(tier, index)
     b.check:SetAllPoints()
     b:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        if GetSpellInfo(self.spell) then
+        if not spellNames[self.spell] and GetSpellInfo(self.spell) then
             GameTooltip:SetHyperlink("spell:" .. self.spell)
         else
             GameTooltip:SetText(SpellLabel(self.spell))
@@ -410,12 +411,14 @@ local function OnModuleMessage(text)
     elseif kind == "R" then
         catalog = {}
         archetypeOf = {}
+        spellNames = {}
     elseif kind == "C" then
         local tier, archetype, spell = tonumber(f[2]), tonumber(f[3]), tonumber(f[4])
         if tier and archetype and spell then
             catalog[tier] = catalog[tier] or {}
             table.insert(catalog[tier], { archetype = archetype, spell = spell })
             archetypeOf[spell] = archetype
+            spellNames[spell] = f[5]
         end
     elseif kind == "K" then
         for i = 1, TIERS do

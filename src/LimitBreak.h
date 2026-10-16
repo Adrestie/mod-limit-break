@@ -94,6 +94,7 @@ namespace LimitBreak
         TEXT_INFO             = 16,
         TEXT_INFO_NO_GAUGE    = 17,
         TEXT_FILLED           = 18,
+        TEXT_NO_TARGET        = 19,
     };
 
     // Ce que le HUD affiche (champ "etat" du message S).
@@ -237,6 +238,51 @@ namespace LimitBreak
     // .limitbreak info, .limitbreak fill (MJ, essais).
     void SendInfo(ChatHandler* handler, Player* player);
     bool Fill(Player* player, float points);
+
+    // ---------------------------------------------------------------------
+    // Les effets (LimitBreakEffects.cpp)
+    // ---------------------------------------------------------------------
+
+    // Les sorts du module (spell_dbc, tranche 90). Le catalogue renvoie aux
+    // seize premiers ; les quatre derniers sont des auras que les effets posent.
+    enum Spells : uint32
+    {
+        SPELL_HEAL_1        = 90001,   // Souffle de vie
+        SPELL_HEAL_2        = 90002,   // Renouveau
+        SPELL_HEAL_3        = 90003,   // Aube
+        SPELL_HEAL_4        = 90004,   // Puits de lumiere
+        SPELL_PHYSICAL_1    = 90005,   // Fracas
+        SPELL_PHYSICAL_2    = 90006,   // Assaut
+        SPELL_PHYSICAL_3    = 90007,   // Armageddon
+        SPELL_PHYSICAL_4    = 90008,   // Ragnarok
+        SPELL_MAGIC_1       = 90009,   // Eclat de givre
+        SPELL_MAGIC_2       = 90010,   // Orbe glaciale
+        SPELL_MAGIC_3       = 90011,   // Faille entropique
+        SPELL_MAGIC_4       = 90012,   // Devoration cosmique
+        SPELL_TANK_1        = 90013,   // Rempart (aura)
+        SPELL_TANK_2        = 90014,   // Egide (aura)
+        SPELL_TANK_3        = 90015,   // Dernier rempart (aura)
+        SPELL_TANK_4        = 90016,   // Bastion eternel (aura)
+        SPELL_SLOW          = 90020,   // ralenti de 50 %, 4 s
+        SPELL_STUN          = 90021,   // etourdi, 2 s
+        SPELL_MAGIC_VULN    = 90022,   // +15 % de degats magiques subis, 15 s
+        SPELL_ARMOR_BREAK   = 90023,   // armure -20 %, 15 s
+    };
+
+    // Vrai pendant que le module inflige ou soigne lui-meme : ses propres
+    // effets ne remplissent pas la jauge. Propre a chaque thread.
+    extern thread_local bool tInOwnEffect;
+
+    // Les effets offensifs exigent une cible hostile ; sans elle, rien n'est
+    // depense.
+    bool NeedsHostileTarget(uint32 spell);
+    Unit* HostileTargetOf(Player* player);
+
+    // Lance l'effet. participants : ceux du conteneur elu, morts compris.
+    void ExecuteEffect(Player* activator, ObjectGuid group, uint32 spell, std::vector<Player*> const& participants, Unit* target);
+
+    // Bastion eternel : on ne tombe pas sous 1 PV (hook DealDamage, phase A).
+    uint32 ModifyDamage(Unit* victim, uint32 damage);
 
     // UN TEXTE DE module_string dans la langue du joueur, en message systeme.
     // Un texte absent de la base ne fait pas tomber le serveur : il se tait.

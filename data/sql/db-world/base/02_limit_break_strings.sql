@@ -26,7 +26,8 @@ INSERT INTO `module_string` (`module`, `id`, `string`) VALUES
 ('mod-limit-break', 15, 'Limit Break: choice of tier {} cleared.'),
 ('mod-limit-break', 16, 'Limit Break: {} points, tier {}, active {}, {} participant(s); container: map {}, instance {}, zone {}, phase {}; fourth segment open {}.'),
 ('mod-limit-break', 17, 'Limit Break: your group has no gauge.'),
-('mod-limit-break', 18, 'Limit Break: {} points added.');
+('mod-limit-break', 18, 'Limit Break: {} points added.'),
+('mod-limit-break', 19, 'Limit Break: this effect needs a hostile target. The gauge is kept.');
 
 DELETE FROM `module_string_locale` WHERE `module` = 'mod-limit-break';
 INSERT INTO `module_string_locale` (`module`, `id`, `locale`, `string`) VALUES
@@ -47,4 +48,5 @@ INSERT INTO `module_string_locale` (`module`, `id`, `locale`, `string`) VALUES
 ('mod-limit-break', 15, 'frFR', 'Limite : choix du palier {} effacé.'),
 ('mod-limit-break', 16, 'frFR', 'Limite : {} points, palier {}, active {}, {} participant(s) ; conteneur : map {}, instance {}, zone {}, phase {} ; 4e segment ouvert {}.'),
 ('mod-limit-break', 17, 'frFR', 'Limite : votre groupe n''a pas de jauge.'),
-('mod-limit-break', 18, 'frFR', 'Limite : {} points ajoutés.');
+('mod-limit-break', 18, 'frFR', 'Limite : {} points ajoutés.'),
+('mod-limit-break', 19, 'frFR', 'Limite : cet effet demande une cible hostile. La jauge est conservée.');
