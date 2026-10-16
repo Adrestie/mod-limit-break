@@ -46,3 +46,7 @@ INSERT INTO `spell_dbc` (`ID`, `Mechanic`, `CastingTimeIndex`, `DurationIndex`, 
 (90021, 12, 1, 39, 1, 1,  6, 0,   0, 6, 12, 0,   0, 0, 0, 0, 0, 0,  1, 'Limit Break: Stun', 'Limite : étourdi'),
 (90022, 0,  1, 8,  1, 32, 6, 15,  0, 6, 87, 126, 0, 0, 0, 0, 0, 0,  1, 'Limit Break: Devoured', 'Limite : dévoré'),
 (90023, 0,  1, 8,  1, 1,  6, -20, 0, 6, 101, 1,  0, 0, 0, 0, 0, 0,  1, 'Limit Break: Sundered', 'Limite : brisé');
+
+-- No equipment requirement (the column defaults to 0, "consumable", which a
+-- cast would require).
+UPDATE `spell_dbc` SET `EquippedItemClass` = -1 WHERE `ID` BETWEEN 90000 AND 90099;

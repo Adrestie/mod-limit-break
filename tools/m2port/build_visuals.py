@@ -76,7 +76,7 @@ def main():
             '136': label, '152': NAME_MASK, '169': NAME_MASK, '186': NAME_MASK, '203': NAME_MASK,
             '216': ONE, '217': ONE, '218': ONE, '225': 1,
         })
-        sql.append(f"({vid}, 1, 1, 1, 1, 6, 0, 1, 4, 'LB visual test: {v['name']}')")
+        sql.append(f"({vid}, 1, 1, 1, 1, -1, 6, 0, 1, 4, 'LB visual test: {v['name']}')")
         print(f"{vid}: {v['name']} ({v['attach']})")
 
     # installer.json: the four DBC entries, the game files
@@ -103,7 +103,8 @@ def main():
         f.write('-- shows one visual: `.cast <id>` on oneself.\n--\n-- Idempotent: the file may be replayed.\n\n')
         f.write(f'DELETE FROM `spell_dbc` WHERE `ID` BETWEEN 90100 AND 90199;\n')
         f.write('INSERT INTO `spell_dbc` (`ID`, `CastingTimeIndex`, `DurationIndex`, `RangeIndex`, `SchoolMask`, '
-                '`Effect_1`, `EffectBasePoints_1`, `ImplicitTargetA_1`, `EffectAura_1`, `Name_Lang_enUS`) VALUES\n')
+                '`EquippedItemClass`, `Effect_1`, `EffectBasePoints_1`, `ImplicitTargetA_1`, `EffectAura_1`, '
+                '`Name_Lang_enUS`) VALUES\n')
         f.write(',\n'.join(sql) + ';\n')
     print(f'{len(conf["visuals"])} visual(s), ids {first}-{last}')
 
