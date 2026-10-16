@@ -238,6 +238,7 @@ namespace LimitBreak
     // .limitbreak info, .limitbreak fill (MJ, essais).
     void SendInfo(ChatHandler* handler, Player* player);
     bool Fill(Player* player, float points);
+    void SendDebug(ChatHandler* handler, Player* player);
 
     // ---------------------------------------------------------------------
     // Les effets (LimitBreakEffects.cpp)

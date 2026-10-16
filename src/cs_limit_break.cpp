@@ -56,6 +56,7 @@ public:
             { "catalog", HandleCatalogCommand, SEC_PLAYER,     Console::No },
             { "info",    HandleInfoCommand,    SEC_PLAYER,     Console::No },
             { "fill",    HandleFillCommand,    SEC_GAMEMASTER, Console::No },
+            { "debug",   HandleDebugCommand,   SEC_GAMEMASTER, Console::No },
         };
 
         static ChatCommandTable commandTable =
@@ -109,6 +110,12 @@ public:
         }
 
         SendInfo(handler, player);
+        return true;
+    }
+
+    static bool HandleDebugCommand(ChatHandler* handler)
+    {
+        SendDebug(handler, handler->GetPlayer());
         return true;
     }
 

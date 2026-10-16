@@ -299,8 +299,12 @@ namespace LimitBreak
 
     ContainerKey KeyOf(Player const* player)
     {
+        // Un MJ en mode MJ voit toutes les phases (PHASEMASK_ANYWHERE) : on
+        // retient la phase ou il serait sans ce mode, sinon il ne partagerait
+        // jamais le conteneur de son groupe.
         Map const* map = player->GetMap();
-        return { map->GetId(), map->GetInstanceId(), player->GetZoneId(), player->GetPhaseMask() };
+        uint32 phaseMask = player->IsGameMaster() ? player->GetPhaseMaskForSpawn() : player->GetPhaseMask();
+        return { map->GetId(), map->GetInstanceId(), player->GetZoneId(), phaseMask };
     }
 
     // =====================================================================
@@ -852,6 +856,41 @@ namespace LimitBreak
             gauge.active ? 1u : 0u, uint32(gauge.participants.size()),
             gauge.container.mapId, gauge.container.instanceId, gauge.container.zoneId, gauge.container.phaseMask,
             gauge.fourthOpen ? 1u : 0u);
+    }
+
+    // .limitbreak debug (MJ) : ce que voit le module pour le joueur.
+    void SendDebug(ChatHandler* handler, Player* player)
+    {
+        Map* map = player->GetMap();
+        ContainerKey key = KeyOf(player);
+        handler->PSendSysMessage("LB debug: map {} instance {} zone {} phase {} inWorld {} mapPlayers {} sEpoch {}",
+            key.mapId, key.instanceId, key.zoneId, key.phaseMask, player->IsInWorld() ? 1 : 0, map->GetPlayersCountExceptGMs(), sEpoch);
+
+        MapCensus* census = map->CustomData.Get<MapCensus>(CENSUS_KEY);
+        if (!census)
+        {
+            handler->PSendSysMessage("LB debug: no census on this map");
+        }
+        else
+        {
+            bool listed = false;
+            for (MapCensus::Entry const& entry : census->entries)
+                if (entry.player == player->GetGUID())
+                    listed = true;
+            handler->PSendSysMessage("LB debug: census epoch {} entries {} self listed {} bosses {}",
+                census->epoch, census->entries.size(), listed ? 1 : 0, census->bosses.size());
+        }
+
+        uint32 listedPlayers = 0;
+        Map::PlayerList const& players = map->GetPlayers();
+        for (auto itr = players.begin(); itr != players.end(); ++itr)
+            if (itr->GetSource() == player)
+                ++listedPlayers;
+        handler->PSendSysMessage("LB debug: self in map player list {}", listedPlayers);
+
+        PlayerCounter* counter = player->CustomData.Get<PlayerCounter>(COUNTER_KEY);
+        handler->PSendSysMessage("LB debug: counter {} participant {} group {}",
+            counter ? 1 : 0, counter && counter->participant ? 1 : 0, counter ? counter->group.ToString() : "-");
     }
 
     bool Fill(Player* player, float points)
