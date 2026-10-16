@@ -50,6 +50,7 @@ EMITTER_TYPES = {1, 2, 3}
 PARTICLE_LOAD = 800
 MODEL_LOAD = 2000
 MAX_ANIM_ID = 505
+BONE_PALETTES = (21, 53, 64, 256)          # boneCountMax values of the client's skins
 
 
 class Fault(Exception):
@@ -328,7 +329,12 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
             first = lookup[bt[field]] if bt[field] < len(lookup) else empty
             while len(lookup) < bt[field] + bt['texture_count']:
                 lookup.append(first)
-    skin['bone_count_max'] = max([skin['bone_count_max'], 21] + [s['bone_count'] for s in skin['submeshes']])
+    # the client's own skins use only these sizes of bone palette: the smallest
+    # that holds the submesh with most bones (138 bones written as is crashed it)
+    most = max([s['bone_count'] for s in skin['submeshes']] or [0])
+    skin['bone_count_max'] = next((v for v in BONE_PALETTES if v >= most), None)
+    if skin['bone_count_max'] is None:
+        raise Fault(f'a submesh uses {most} bones, past {BONE_PALETTES[-1]}')
 
     open(os.path.join(outdir, newname + '.m2'), 'wb').write(m2.write(model))
     open(os.path.join(outdir, newname + '00.skin'), 'wb').write(m2.write_skin(skin))

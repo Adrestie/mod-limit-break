@@ -128,6 +128,9 @@ def validate(path, corpus=False):
         s = m2.read_skin(open(sp, 'rb').read())
     except m2.M2Error as e:
         return r.faults + [f'skin unreadable: {e}']
+    most = max([sm['bone_count'] for sm in s['submeshes']] or [0])
+    r(s['bone_count_max'] in port.BONE_PALETTES, f'bone palette {s["bone_count_max"]} (client: {port.BONE_PALETTES})')
+    r(s['bone_count_max'] >= most, f'bone palette {s["bone_count_max"]} under {most} bones')
     nv = len(m['vertices'])
     r(all(v < nv for v in s['vertices']), 'skin vertex past the model vertices')
     r(all(i < len(s['vertices']) for i in s['indices']), 'skin index past the skin vertices')
