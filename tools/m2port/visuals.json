@@ -54,13 +54,13 @@
     {
       "name": "lb_8fx_jaina_frozenorb_state",
       "source": "spells\\8fx_jaina_frozenorb_state.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: Jaina frozen orb (state)"
     },
     {
       "name": "lb_8fx_jaina_frozenorb_precast",
       "source": "spells\\8fx_jaina_frozenorb_precast.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: Jaina frozen orb (precast)"
     },
     {
@@ -72,13 +72,13 @@
     {
       "name": "lb_8fx_jaina_glacialray_precast",
       "source": "spells\\8fx_jaina_glacialray_precast.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: Jaina glacial ray (precast)"
     },
     {
       "name": "lb_8fx_jaina_icefall_precast",
       "source": "spells\\8fx_jaina_icefall_precast.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: Jaina icefall (precast)"
     },
     {
@@ -108,7 +108,7 @@
     {
       "name": "lb_7fx_soulengine_soulwrap",
       "source": "spells\\7fx_soulengine_soulwrap.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: soul engine soulwrap"
     },
     {
@@ -132,13 +132,13 @@
     {
       "name": "lb_7fx_deathtitan_temporalblast_cast",
       "source": "spells\\7fx_deathtitan_temporalblast_cast.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: temporal blast (cast)"
     },
     {
       "name": "lb_7fx_deathtitan_temporalblast_precast",
       "source": "spells\\7fx_deathtitan_temporalblast_precast.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Magic: temporal blast (precast)"
     },
     {
@@ -150,7 +150,7 @@
     {
       "name": "lb_7fx_kiljaeden_armageddon_meteor_missile",
       "source": "spells\\7fx_kiljaeden_armageddon_meteor_missile.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Physical: Armageddon meteor (missile)"
     },
     {
@@ -168,7 +168,7 @@
     {
       "name": "lb_7fx_aggramar_flare_precast",
       "source": "spells\\7fx_aggramar_flare_precast.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Physical: Aggramar flare (precast)"
     },
     {
@@ -180,7 +180,7 @@
     {
       "name": "lb_7fx_darkmoon_forsakenstage_missile",
       "source": "spells\\7fx_darkmoon_forsakenstage_missile.m2",
-      "attach": "chest",
+      "attach": "base",
       "label": "Physical: Darkmoon stage missile"
     }
   ]

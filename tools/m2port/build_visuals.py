@@ -10,7 +10,8 @@ For each visual of visuals.json, numbered from first_id (tranche 90):
   - SpellVisualEffectName (the model), SpellVisualKit (the model on the base or
     the chest of the unit), SpellVisual (that kit as the state of an aura): one
     row each, same number, written into installer.json;
-  - a test spell of the same number: a 10-second aura, on the client (Spell.dbc,
+  - a test spell of the same number: a 10-second persistent area at the
+    caster's feet (the visual stays on the ground where it was cast), on the client (Spell.dbc,
     installer.json) and on the server (data/sql/db-world/base/07_limit_break_visual_tests.sql).
     `.cast <number>` shows the visual on oneself for 10 seconds.
 
@@ -68,16 +69,18 @@ def main():
         kit[str(ATTACH[v['attach']])] = vid
         rows['SpellVisualKit.dbc'].append(kit)
 
-        rows['SpellVisual.dbc'].append({'0': vid, '4': vid, '10': 1, '16': -1})
+        # the kit on the persistent area (the spell's ground object), not on the caster:
+        # the effect stays where it was cast
+        rows['SpellVisual.dbc'].append({'0': vid, '10': 1, '16': -1, '25': vid})
 
         label = v['label']
         rows['Spell.dbc'].append({
             '0': vid, '28': 1, '35': 101, '40': 1, '46': 1, '68': -1,
-            '71': 6, '86': 1, '95': 4, '131': vid, '133': 1,
+            '71': 27, '86': 18, '92': 14, '95': 4, '131': vid, '133': 1,
             '136': label, '152': NAME_MASK, '169': NAME_MASK, '186': NAME_MASK, '203': NAME_MASK,
             '216': ONE, '217': ONE, '218': ONE, '225': 1,
         })
-        sql.append(f"({vid}, 1, 1, 1, 1, -1, 6, 0, 1, 4, 'LB visual test: {v['name']}')")
+        sql.append(f"({vid}, 1, 1, 1, 1, -1, 27, 0, 18, 14, 4, 'LB visual test: {v['name']}')")
         print(f"{vid}: {v['name']} ({v['attach']})")
 
     # installer.json: the four DBC entries, the game files
@@ -104,7 +107,7 @@ def main():
         f.write('-- shows one visual: `.cast <id>` on oneself.\n--\n-- Idempotent: the file may be replayed.\n\n')
         f.write(f'DELETE FROM `spell_dbc` WHERE `ID` BETWEEN 90100 AND 90199;\n')
         f.write('INSERT INTO `spell_dbc` (`ID`, `CastingTimeIndex`, `DurationIndex`, `RangeIndex`, `SchoolMask`, '
-                '`EquippedItemClass`, `Effect_1`, `EffectBasePoints_1`, `ImplicitTargetA_1`, `EffectAura_1`, '
+                '`EquippedItemClass`, `Effect_1`, `EffectBasePoints_1`, `ImplicitTargetA_1`, `EffectRadiusIndex_1`, `EffectAura_1`, '
                 '`Name_Lang_enUS`) VALUES\n')
         f.write(',\n'.join(sql) + ';\n')
     print(f'{len(conf["visuals"])} visual(s), ids {first}-{last}')
