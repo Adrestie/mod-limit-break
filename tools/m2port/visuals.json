@@ -2,6 +2,7 @@
   "export_dir": "E:/atelier/limit-break/export",
   "game_dir": "Spells\\LimitBreak",
   "first_id": 90100,
+  "scale": 3.0,
   "visuals": [
     {
       "name": "lb_7fx_tombofsargeras_raid_cathedral_arcaneshield",

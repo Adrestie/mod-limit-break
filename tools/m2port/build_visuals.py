@@ -63,7 +63,9 @@ def main():
 
         model_path = f"{game_dir}\\{v['name']}.mdx"     # the tables name models .mdx
         rows['SpellVisualEffectName.dbc'].append(
-            {'0': vid, '1': v['name'], '2': model_path, '3': 0, '4': ONE, '5': MIN_SCALE, '6': MAX_SCALE})
+            {'0': vid, '1': v['name'], '2': model_path, '3': 0,
+             '4': struct.unpack('<i', struct.pack('<f', v.get('scale', conf.get('scale', 1.0))))[0],
+             '5': MIN_SCALE, '6': MAX_SCALE})
 
         kit = {'0': vid, '1': -1, '2': -1, '17': -1, '18': -1, '19': -1, '20': -1}
         kit[str(ATTACH[v['attach']])] = vid
