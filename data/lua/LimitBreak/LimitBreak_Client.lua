@@ -200,7 +200,8 @@ end
 local SEG_W, SEG_H, SEG_GAP, SLOT, PAD = 64, 16, 4, 40, 10
 
 local bar = CreateFrame("Frame", "LimitBreakBar", UIParent)
-bar:SetSize(PAD + TIERS * SEG_W + (TIERS - 1) * SEG_GAP + 10 + SLOT + PAD, SLOT + 2 * PAD + 6)
+-- the slot keeps 18 px around it: its border overlaps the icon by 16
+bar:SetSize(PAD + TIERS * SEG_W + (TIERS - 1) * SEG_GAP + 14 + SLOT + 18, SLOT + 36)
 bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 180)
 bar:SetMovable(true)
 bar:EnableMouse(true)
@@ -221,7 +222,7 @@ local segments = {}
 for i = 1, TIERS do
     local holder = CreateFrame("Frame", nil, bar)
     holder:SetSize(SEG_W + 4, SEG_H + 4)
-    holder:SetPoint("TOPLEFT", bar, "TOPLEFT", PAD - 2 + (i - 1) * (SEG_W + SEG_GAP), -22)
+    holder:SetPoint("TOPLEFT", bar, "TOPLEFT", PAD - 2 + (i - 1) * (SEG_W + SEG_GAP), -28)
     holder:SetBackdrop({
         edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", edgeSize = 8,
         insets = { left = 2, right = 2, top = 2, bottom = 2 },
@@ -280,16 +281,14 @@ end
 -- The action slot: the spell of the tier reached, or the way to choose one.
 local slot = CreateFrame("Button", "LimitBreakSlot", bar)
 slot:SetSize(SLOT, SLOT)
-slot:SetPoint("RIGHT", bar, "RIGHT", -PAD, -1)
-slot:SetNormalTexture(CHOOSE_ICON)
-slot:GetNormalTexture():SetTexCoord(0.07, 0.93, 0.07, 0.93)
+slot:SetPoint("RIGHT", bar, "RIGHT", -18, 0)
 slot:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
 slot:SetPushedTexture("Interface\\Buttons\\UI-Quickslot-Depress")
 
 local slotBorder = slot:CreateTexture(nil, "OVERLAY")
 slotBorder:SetTexture("Interface\\Buttons\\UI-Quickslot2")
-slotBorder:SetPoint("TOPLEFT", -12, 12)
-slotBorder:SetPoint("BOTTOMRIGHT", 12, -12)
+slotBorder:SetPoint("TOPLEFT", -16, 16)
+slotBorder:SetPoint("BOTTOMRIGHT", 16, -16)
 
 -- the glow of a slot that can be used, pulsing
 local glow = slot:CreateTexture(nil, "OVERLAY")
@@ -299,6 +298,18 @@ glow:SetPoint("CENTER")
 glow:SetSize(SLOT * 1.9, SLOT * 1.9)
 glow:SetVertexColor(1, 0.8, 0.2)
 glow:Hide()
+
+-- The icon of the slot, set inside its border.
+local function SetSlotIcon(texture, desaturated)
+    slot:SetNormalTexture(texture)
+    local icon = slot:GetNormalTexture()
+    icon:ClearAllPoints()
+    icon:SetPoint("TOPLEFT", 2, -2)
+    icon:SetPoint("BOTTOMRIGHT", -2, 2)
+    icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+    icon:SetDesaturated(desaturated)
+end
+SetSlotIcon(CHOOSE_ICON, true)
 
 local pulse = 0
 slot:SetScript("OnUpdate", function(_, elapsed)
@@ -311,7 +322,7 @@ end)
 -- The small button that opens the selection at any time.
 local gear = CreateFrame("Button", nil, bar)
 gear:SetSize(14, 14)
-gear:SetPoint("TOPRIGHT", bar, "TOPRIGHT", -PAD - SLOT - 6, -6)
+gear:SetPoint("TOPRIGHT", bar, "TOPRIGHT", -18 - SLOT - 8, -6)
 gear:SetNormalTexture("Interface\\Icons\\INV_Misc_Book_09")
 gear:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
 
@@ -319,7 +330,8 @@ gear:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
 -- The selection window: one line per archetype, one column per tier
 -- ---------------------------------------------------------------------------
 
-local CELL, CELL_GAP, ROW_LABEL_W, HEADER_H = 40, 14, 150, 22
+-- the gap leaves room for the borders, which overlap a cell by 16 px
+local CELL, CELL_GAP, ROW_LABEL_W, HEADER_H = 40, 30, 150, 34
 
 local picker = CreateFrame("Frame", "LimitBreakPicker", UIParent)
 picker:SetSize(40 + ROW_LABEL_W + TIERS * (CELL + CELL_GAP), 120)
@@ -382,13 +394,14 @@ local function PickerCell(row, tier)
     cell:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
 
     cell.icon = cell:CreateTexture(nil, "ARTWORK")
-    cell.icon:SetAllPoints()
+    cell.icon:SetPoint("TOPLEFT", 2, -2)
+    cell.icon:SetPoint("BOTTOMRIGHT", -2, 2)
     cell.icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 
     cell.border = cell:CreateTexture(nil, "OVERLAY")
     cell.border:SetTexture("Interface\\Buttons\\UI-Quickslot2")
-    cell.border:SetPoint("TOPLEFT", -12, 12)
-    cell.border:SetPoint("BOTTOMRIGHT", 12, -12)
+    cell.border:SetPoint("TOPLEFT", -16, 16)
+    cell.border:SetPoint("BOTTOMRIGHT", 16, -16)
 
     cell.selected = cell:CreateTexture(nil, "OVERLAY")
     cell.selected:SetTexture("Interface\\Buttons\\CheckButtonHilight")
@@ -587,23 +600,17 @@ local function Refresh()
     -- the slot: the spell of the tier reached, or the way to choose one
     local combat = InCombat()
     if live and state.tier > 0 and state.spell > 0 then
-        slot:SetNormalTexture(SpellIcon(state.spell))
-        slot:GetNormalTexture():SetTexCoord(0.07, 0.93, 0.07, 0.93)
-        slot:GetNormalTexture():SetDesaturated(false)
+        SetSlotIcon(SpellIcon(state.spell), false)
         slot:Enable()
         slot.mode = "use"
         glow:Show()
     elseif live and state.tier > 0 then
-        slot:SetNormalTexture(CHOOSE_ICON)
-        slot:GetNormalTexture():SetTexCoord(0.07, 0.93, 0.07, 0.93)
-        slot:GetNormalTexture():SetDesaturated(combat)
+        SetSlotIcon(CHOOSE_ICON, combat)
         if combat then slot:Disable() else slot:Enable() end
         slot.mode = "choose"
         glow:Hide()
     else
-        slot:SetNormalTexture(CHOOSE_ICON)
-        slot:GetNormalTexture():SetTexCoord(0.07, 0.93, 0.07, 0.93)
-        slot:GetNormalTexture():SetDesaturated(true)
+        SetSlotIcon(CHOOSE_ICON, true)
         slot:Disable()
         slot.mode = nil
         glow:Hide()
