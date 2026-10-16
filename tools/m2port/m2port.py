@@ -196,6 +196,13 @@ def port(src, outdir, newname, gamedir='Spells\\LimitBreak'):
         blend = struct.unpack_from('<I', md, sofs + i * SEQUENCE + 0x1C)[0]
         struct.pack_into('<I', md, sofs + i * SEQUENCE + 0x1C, blend & 0xFFFF)
 
+    # --- global loops: modern models leave some at 0 ms, a constant; the old
+    # client takes the time modulo that length: a division by zero at load
+    gcount, gofs = array(md, fields, 'global_loops')
+    for i in range(gcount):
+        if struct.unpack_from('<I', md, gofs + i * 4)[0] == 0:
+            struct.pack_into('<I', md, gofs + i * 4, 1)
+
     # --- textures: a path for each FileDataID -------------------------------
     tcount, tofs = array(md, fields, 'textures')
     for i in range(tcount):
