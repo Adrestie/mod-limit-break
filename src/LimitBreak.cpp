@@ -224,6 +224,7 @@ namespace LimitBreak
         sConfig.updateInterval = std::max<uint32>(100, sConfigMgr->GetOption<uint32>("LimitBreak.UpdateInterval", 1000));
         sConfig.requestCooldown = sConfigMgr->GetOption<uint32>("LimitBreak.RequestCooldown", 500);
         sConfig.outsideDisplay = uint8(std::min<uint32>(1, sConfigMgr->GetOption<uint32>("LimitBreak.Hud.OutsideDisplay", 0)));
+        sConfig.pausedDisplay = uint8(std::min<uint32>(1, sConfigMgr->GetOption<uint32>("LimitBreak.Hud.PausedDisplay", 0)));
         sConfig.countSelfHeal = sConfigMgr->GetOption<bool>("LimitBreak.Count.SelfHeal", true);
         sConfig.countEnvironment = sConfigMgr->GetOption<bool>("LimitBreak.Count.Environment", true);
         sConfig.countPvP = sConfigMgr->GetOption<bool>("LimitBreak.Count.PvP", true);
@@ -595,8 +596,16 @@ namespace LimitBreak
                 continue;
             }
 
+            // Masquee hors du conteneur elu et pendant la pause (reglages) :
+            // le montant, lui, reste conserve.
             HudState state = participants.count(s.player) ? HUD_ACTIVE
                 : gauge->second.active ? HUD_OUTSIDE : HUD_PAUSED;
+            if ((state == HUD_OUTSIDE && !sConfig.outsideDisplay) || (state == HUD_PAUSED && !sConfig.pausedDisplay))
+            {
+                if (sHudShown.erase(guid))
+                    SendState(s.player, HUD_OFF, nullptr);
+                continue;
+            }
             SendState(s.player, state, &gauge->second);
             sHudShown.insert(guid);
         }

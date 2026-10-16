@@ -44,7 +44,8 @@ Written:
   chosen for it (greyed in combat), and a selection window. The module pushes
   the state to the bar as addon messages; the bar's buttons go through AIO to
   the commands above. A member outside the elected container is not
-  eligible and sees no bar at all; a paused gauge stays visible.
+  eligible and sees no bar at all, and a paused gauge is hidden too (its
+  amount is kept).
 
 * **Effects** (`src/LimitBreakEffects.cpp`, specification §17): four
   archetypes (heal, physical damage, magic damage, tank) times four tiers, run

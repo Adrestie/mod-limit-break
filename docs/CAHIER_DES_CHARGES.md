@@ -122,8 +122,9 @@ paliers, et ne permet pas d'en changer librement hors combat.
 - HUD dédié, barre segmentée, poussée aux participants du conteneur élu.
 - La barre est toujours affichée, indépendamment de l'état des choix du joueur.
 - Un membre non éligible, c'est-à-dire hors du conteneur élu, ne voit pas la
-  barre du tout : elle est masquée, pas grisée (tranché le 2026-10-16). La
-  pause, qui concerne tout le groupe, reste affichée.
+  barre du tout : elle est masquée, pas grisée (tranché le 2026-10-16). Pendant
+  la pause (aucun conteneur n'atteint le plancher), la barre est masquée aussi ;
+  le montant reste conservé (tranché le 2026-10-16).
 - Cadence de rafraîchissement fixe et volontairement basse, jamais une diffusion
   par coup porté.
 

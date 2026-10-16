@@ -128,9 +128,18 @@ LimitBreak.RequestCooldown = 500
 #    LimitBreak.Hud.OutsideDisplay
 #        Description: The bar of a member outside the elected container:
 #                     he is not eligible, so the bar is not shown at all
-#                     (decided 2026-10-16). A paused gauge (too few members
-#                     together) stays visible: that is the whole group.
+#                     (decided 2026-10-16).
 #        Default:     0 - (Hidden)
 #                     1 - (Greyed)
 
 LimitBreak.Hud.OutsideDisplay = 0
+
+#
+#    LimitBreak.Hud.PausedDisplay
+#        Description: The bar while the gauge is paused (no container holds
+#                     enough members of the group). The amount is kept either
+#                     way (decided 2026-10-16: hidden).
+#        Default:     0 - (Hidden)
+#                     1 - (Greyed, "Paused")
+
+LimitBreak.Hud.PausedDisplay = 0
