@@ -16,7 +16,7 @@
 --
 -- Idempotent: the file may be replayed.
 
-DELETE FROM `spell_dbc` WHERE `ID` BETWEEN 90000 AND 90999;
+DELETE FROM `spell_dbc` WHERE `ID` BETWEEN 90000 AND 90099;
 INSERT INTO `spell_dbc` (`ID`, `Mechanic`, `CastingTimeIndex`, `DurationIndex`, `RangeIndex`, `SchoolMask`,
   `Effect_1`, `EffectBasePoints_1`, `EffectDieSides_1`, `ImplicitTargetA_1`, `EffectAura_1`, `EffectMiscValue_1`,
   `Effect_2`, `EffectBasePoints_2`, `EffectDieSides_2`, `ImplicitTargetA_2`, `EffectAura_2`, `EffectMiscValue_2`,

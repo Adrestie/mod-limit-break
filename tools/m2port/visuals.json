@@ -1,0 +1,13 @@
+{
+  "export_dir": "C:\\Users\\Arthe\\wow.export",
+  "game_dir": "Spells\\LimitBreak",
+  "first_id": 90100,
+  "visuals": [
+    {"name": "lb_test_egg", "source": "spells\\fx_mediumegg_aura.m2", "attach": "base",
+     "label": "Test: medium egg aura"},
+    {"name": "lb_test_spell42", "source": "spells\\10fx_spell42.m2", "attach": "base",
+     "label": "Test: 10fx spell 42"},
+    {"name": "lb_test_whiplash", "source": "spells\\warlock_whiplash_01.m2", "attach": "chest",
+     "label": "Test: warlock whiplash"}
+  ]
+}
