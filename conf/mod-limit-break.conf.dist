@@ -1,0 +1,134 @@
+#
+# mod-limit-break configuration
+#
+# Copy this file to mod-limit-break.conf in the folder of the module
+# configurations (configs/modules) to change its values. Every value is read
+# again by `.reload config`, without a restart; the world tables of the module
+# are read again at the same time.
+#
+# THE VALUES OF THE SCALE ARE NOT DECIDED YET (docs/CAHIER_DES_CHARGES.md, §16).
+# The factors below are neutral (1.0) and the thresholds are placeholders for
+# trying the mechanism, not a balance.
+#
+
+[worldserver]
+
+########################################
+# Limit Break
+########################################
+#
+#    LimitBreak.Enable
+#        Description: Turns the module on or off. Off, no gauge fills, the
+#                     bars disappear and the gauges are emptied.
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+
+LimitBreak.Enable = 1
+
+#
+#    LimitBreak.EnableInBattlegrounds
+#        Description: Lets the gauge live in battlegrounds and arenas.
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+LimitBreak.EnableInBattlegrounds = 0
+
+########################################
+# The scale
+########################################
+#
+#    LimitBreak.Factor.heal
+#    LimitBreak.Factor.DamageTaken
+#    LimitBreak.Factor.DamageDone
+#        Description: Points per unit of each category. Each multiplies a
+#                     NORMALISED amount, the same at every level and with any
+#                     gear:
+#                     heal        - effective healing (overheal excluded),
+#                                   divided by the healed unit's max health;
+#                     DamageTaken - net damage taken, divided by the victim's
+#                                   max health;
+#                     DamageDone  - net damage dealt, divided by the
+#                                   ATTACKER's max health.
+#                     A full bar of health healed, taken or dealt is 1 unit.
+#        Default:     1.0 (neutral, NOT DECIDED)
+
+LimitBreak.Factor.heal = 1.0
+LimitBreak.Factor.DamageTaken = 1.0
+LimitBreak.Factor.DamageDone = 1.0
+
+#
+#    LimitBreak.GaugeThreshold_1
+#    LimitBreak.GaugeThreshold_2
+#    LimitBreak.GaugeThreshold_3
+#    LimitBreak.GaugeThreshold_4
+#        Description: Cumulative points at which the gauge reaches each tier.
+#                     The fourth only counts while a boss of the list is
+#                     engaged. Each is raised to the previous one if lower.
+#        Default:     100, 200, 300, 400 (placeholders, NOT DECIDED)
+
+LimitBreak.GaugeThreshold_1 = 100
+LimitBreak.GaugeThreshold_2 = 200
+LimitBreak.GaugeThreshold_3 = 300
+LimitBreak.GaugeThreshold_4 = 400
+
+########################################
+# What counts (rules NOT DECIDED, §16: switches meanwhile)
+########################################
+#
+#    LimitBreak.Count.SelfHeal
+#        Description: Healing oneself (or one's pet) fills the gauge.
+#    LimitBreak.Count.Environment
+#        Description: Damage without an attacker (falling, lava...) or dealt
+#                     to oneself fills the gauge, as damage taken only.
+#    LimitBreak.Count.PvP
+#        Description: Damage between players, duels included, fills the gauge.
+#    LimitBreak.Count.Pets
+#        Description: Pets, totems, guardians and vehicles fill the gauge for
+#                     their master.
+#        Default:     1 - (Counted) for all four
+#                     0 - (Not counted)
+
+LimitBreak.Count.SelfHeal = 1
+LimitBreak.Count.Environment = 1
+LimitBreak.Count.PvP = 1
+LimitBreak.Count.Pets = 1
+
+########################################
+# Container, display, requests
+########################################
+#
+#    LimitBreak.MinMembers
+#        Description: Members of a group that must be together (same map,
+#                     instance, zone and phase) for the gauge to fill and be
+#                     spent. Below that, the gauge is paused and keeps its
+#                     amount.
+#        Default:     4
+
+LimitBreak.MinMembers = 4
+
+#
+#    LimitBreak.UpdateInterval
+#        Description: Milliseconds between two counts of the gauges and two
+#                     refreshes of the bars. Kept low on purpose: the bars are
+#                     never refreshed per hit.
+#        Default:     1000 (minimum 100)
+
+LimitBreak.UpdateInterval = 1000
+
+#
+#    LimitBreak.RequestCooldown
+#        Description: Milliseconds a player must wait between two requests of
+#                     the interface (use, choose, catalog, info); faster ones
+#                     are dropped before any work.
+#        Default:     500
+
+LimitBreak.RequestCooldown = 500
+
+#
+#    LimitBreak.Hud.OutsideDisplay
+#        Description: The bar of a member outside the elected container
+#                     (rule NOT DECIDED, §16).
+#        Default:     1 - (Greyed)
+#                     0 - (Hidden)
+
+LimitBreak.Hud.OutsideDisplay = 1

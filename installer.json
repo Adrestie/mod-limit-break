@@ -1,0 +1,69 @@
+{
+  "format": "wow-mods-installer/1",
+  "module": "mod-limit-break",
+  "title": "Limit Break",
+  "fields": {
+    "worldserver": "required",
+    "sources": "required",
+    "mysql": "required"
+  },
+  "signature": [
+    "src/LimitBreak.cpp",
+    "src/limit_break_loader.cpp"
+  ],
+  "exclude_from_sources": [
+    "data/lua"
+  ],
+  "configuration": {
+    "file": "mod-limit-break.conf",
+    "template": "conf/mod-limit-break.conf.dist"
+  },
+  "lua": {
+    "folder": "LimitBreak",
+    "sources": [
+      "data/lua/LimitBreak"
+    ]
+  },
+  "database": {
+    "characters": {
+      "tables": [
+        "mod_limit_break_choice"
+      ],
+      "kept_on_update": [
+        "mod_limit_break_choice"
+      ],
+      "rows": [
+        {
+          "table": "updates",
+          "where": "name IN ({sql_files:db-characters})"
+        }
+      ]
+    },
+    "world": {
+      "tables": [
+        "mod_limit_break_archetype",
+        "mod_limit_break_class_archetype",
+        "mod_limit_break_effect",
+        "mod_limit_break_boss"
+      ],
+      "rows": [
+        {
+          "table": "module_string",
+          "where": "module = 'mod-limit-break'"
+        },
+        {
+          "table": "module_string_locale",
+          "where": "module = 'mod-limit-break'"
+        },
+        {
+          "table": "command",
+          "where": "name = 'limitbreak' OR name LIKE 'limitbreak %'"
+        },
+        {
+          "table": "updates",
+          "where": "name IN ({sql_files:db-world})"
+        }
+      ]
+    }
+  }
+}
