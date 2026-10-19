@@ -12,6 +12,17 @@ spends it, and no distance is ever measured.
 The design is written down in [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md),
 in French; it is the only reference of the module.
 
+## Requirements
+
+| What | Why |
+|---|---|
+| AzerothCore WotLK (3.3.5a) | the C++ module is compiled into it |
+| [ALE](https://github.com/azerothcore/mod-ale) (the AzerothCore Lua Engine, formerly mod-eluna) | runs the bar's server script (`data/lua/LimitBreak` goes into `lua_scripts`) |
+| [AIO](https://github.com/Rochet2/AIO) | server AND client: the bar is sent over it, and every player needs the `AIO_Client` addon |
+
+Without ALE and AIO the gauge still fills and the `.limitbreak` commands still
+work, but no player sees the bar.
+
 ## Status: milestone 2, the sixteen effects
 
 The mechanism, the effects and the boss list are written; the scale is not. What is still undecided in the specification (§16) ships empty or
