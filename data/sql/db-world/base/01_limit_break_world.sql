@@ -8,7 +8,7 @@
 --
 -- The content of the archetype and catalogue tables is written by
 -- 05_limit_break_content.sql (decided 2026-10-16), the module's spells by
--- 04_limit_break_spells.sql (ids 90000-90999), the boss list by
+-- 04_limit_break_spells.sql (ids 90000-90299), the boss list by
 -- 06_limit_break_bosses.sql.
 
 CREATE TABLE IF NOT EXISTS `mod_limit_break_archetype` (

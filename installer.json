@@ -38,7 +38,7 @@
       "rows": [
         {
           "table": "character_aura",
-          "where": "spell BETWEEN 90000 AND 90999"
+          "where": "spell BETWEEN 90000 AND 90299"
         },
         {
           "table": "updates",
@@ -56,7 +56,7 @@
       "rows": [
         {
           "table": "spell_dbc",
-          "where": "ID BETWEEN 90000 AND 90999"
+          "where": "ID BETWEEN 90000 AND 90299"
         },
         {
           "table": "module_string",

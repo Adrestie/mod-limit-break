@@ -1,4 +1,4 @@
--- mod-limit-break — the spells of the module (tranche 90, ids 90000-90999).
+-- mod-limit-break — the spells of the module (ids 90000-90299 of the WoW-mods registry).
 --
 -- The server runs every effect itself (src/LimitBreakEffects.cpp); these rows
 -- only give it what it needs:
